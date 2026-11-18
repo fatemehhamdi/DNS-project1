@@ -6,3 +6,7 @@ work/
 *.o
 *.bin
 report*.json
+docker_out/
+docker_registry/
+reports/
+w/
