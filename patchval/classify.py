@@ -1,117 +1,241 @@
 """Security and functional classification of patch behaviour.
 
-This module turns paired base/patched evidence into the finding categories the
-brief mandates:
+Base and patched are compared ONLY in matching build modes (release vs
+release, sanitized vs sanitized). For every security test and every mode,
+each side is reduced to a state:
 
-  * FIXED               -- a reproducible error seen on base is no longer
-                           observed on the patched version within test scope.
-  * VULN_REMAINS        -- the same error class still reproduces after patching.
-  * INCOMPLETE_FIX      -- the original crasher is blocked, but a sibling input
-                           of the same vulnerability class still triggers it.
-  * NEW_ISSUE           -- a confirmed crash appears on patched that did not
-                           occur on base.
-  * FUNC_REGRESSION     -- a valid input that passed its independent oracle on
-                           base fails on the patched version.
-  * INCONCLUSIVE        -- baseline not reproduced, unstable finding, or an
-                           unclassified stop; evidence is insufficient to judge.
+  base:    CRASH (confirmed evidence) | NOCRASH | UNCLASSIFIED
+  patched: CRASH | CLEAN (exit code documented as graceful) | UNCLASSIFIED
 
-Guardrails from the brief that are enforced here:
-  - The patched binary's *own* output is never the correctness oracle; a
-    functional verdict compares against the test's independent expectation.
-  - A single unclassified stop (timeout / bare non-zero exit with no crash
-    evidence) does NOT confirm a vulnerability.
-  - "Not observed in tests" is scope-limited, not a proof of absence.
-  - Base and patched are always compared in *matching* build modes.
+and the pair gives a per-mode verdict:
+
+  base \\ patched   CRASH                      CLEAN          UNCLASSIFIED
+  CRASH            same id -> REMAINS          FIXED          INCONCLUSIVE
+                   other id -> NEW_ISSUE
+  NOCRASH          NEW_ISSUE                   NOT_TRIGGERED  INCONCLUSIVE
+  UNCLASSIFIED     NEW_ISSUE (baseline unk.)   INCONCLUSIVE   INCONCLUSIVE
+
+A timeout, resource-limit hit, non-security signal, or an undocumented
+non-zero exit on the patched side is therefore never read as "fixed".
+Mode verdicts combine with REMAINS > NEW_ISSUE > INCONCLUSIVE > FIXED >
+NOT_TRIGGERED. A FIXED / REMAINS / NEW_ISSUE result must then survive the
+mandatory replays (apply_stability) or it becomes INCONCLUSIVE.
+
+The functional oracle is the expectation written in the config at design
+time -- never the patched program's own output.
 """
 
 from __future__ import annotations
 
 from . import exitcodes
 from .config import TestCase
-from .crash import (
-    CrashInfo, DET_ASAN, DET_UBSAN, DET_CANARY, DET_FORTIFY, DET_SIGNAL,
-)
+from .crash import STATE_CRASH, STATE_UNCLASSIFIED, CrashInfo
 from .model import (
     TestRecord, Execution, Finding,
-    FIXED, VULN_REMAINS, INCOMPLETE_FIX, NEW_ISSUE, INCONCLUSIVE,
+    FIXED, VULN_REMAINS, INCOMPLETE_FIX, NEW_ISSUE, INCONCLUSIVE, NOT_TRIGGERED, STALE,
     FUNC_REGRESSION, FUNC_OK, FUNC_BASELINE_BROKEN,
 )
 
-# Build modes
-_SAN = "sanitized"
-_REL = "release"
+MODES = ("sanitized", "release")
 
-# Detection mechanisms that constitute *confirmed* security evidence
-# (an unclassified bare SIGSEGV still counts as a memory-safety crash, but a
-# plain non-zero exit or a timeout does not).
-_CONFIRMING = {DET_ASAN, DET_UBSAN, DET_CANARY, DET_FORTIFY, DET_SIGNAL}
+B_CRASH, B_NOCRASH, B_UNCL = "CRASH", "NOCRASH", "UNCLASSIFIED"
+P_CRASH, P_CLEAN, P_UNCL = "CRASH", "CLEAN", "UNCLASSIFIED"
 
 
-def _evidence(execs: dict, version: str) -> Execution | None:
-    """Preferred representative execution for a version: sanitized first
-    (richer, symbolized evidence), else release."""
-    return execs.get((version, _SAN)) or execs.get((version, _REL))
+def _graceful(test: TestCase, default: list[int]) -> list[int]:
+    return test.graceful_exit_codes if test.graceful_exit_codes is not None else default
 
 
-def _confirmed_crash(ex: Execution | None) -> bool:
-    if ex is None:
-        return False
+def base_state(ex: Execution) -> tuple[str, str]:
     ci = ex.crash
-    if not ci.is_crash:
-        return False
-    # A bare SIGSEGV/SIGABRT with no sanitizer context is still a real crash,
-    # but a resource limit or timeout is not.
-    if ci.resource_limited or ci.timed_out:
-        return False
-    return ci.detection in _CONFIRMING
+    if ci.state == STATE_CRASH:
+        return B_CRASH, ci.fingerprint
+    if ci.state == STATE_UNCLASSIFIED:
+        return B_UNCL, ci.unclassified_reason or "unclassified stop"
+    return B_NOCRASH, f"exit {ex.run.exit_code}"
 
 
-def _crash_in_any_mode(record: TestRecord, version: str) -> tuple[bool, Execution | None]:
-    """A crash counts if observed in *either* matching build mode."""
-    best = None
-    for mode in (_SAN, _REL):
-        ex = record.get(version, mode)
-        if ex is not None and _confirmed_crash(ex):
-            # prefer the one with source frames
-            if best is None or (ex.crash.frames and not best.crash.frames):
-                best = ex
-    return (best is not None), best
+def patched_state(ex: Execution, graceful: list[int]) -> tuple[str, str]:
+    ci = ex.crash
+    if ci.state == STATE_CRASH:
+        return P_CRASH, ci.fingerprint
+    if ci.state == STATE_UNCLASSIFIED:
+        return P_UNCL, ci.unclassified_reason or "unclassified stop"
+    if ex.run.exit_code in graceful:
+        return P_CLEAN, f"exit {ex.run.exit_code} (graceful)"
+    return P_UNCL, (f"exit {ex.run.exit_code} is not a documented graceful exit "
+                    f"code {graceful}; cannot adjudicate")
 
 
-def _same_vuln_class(a: CrashInfo, b: CrashInfo) -> bool:
-    """Heuristic: same error type, and (if both have source frames) same top
-    source location. Used to decide VULN_REMAINS vs NEW_ISSUE."""
-    if a.error_type != b.error_type:
-        return False
-    # If both pin a source location, require it to match; otherwise accept the
-    # type-level match (common for release-only bare signals).
-    fa = a.frames[0] if a.frames else None
-    fb = b.frames[0] if b.frames else None
-    if fa and fb and fa.file and fb.file:
-        same_file = fa.file.split("/")[-1] == fb.file.split("/")[-1]
-        return same_file
-    return True
+def same_crash(a: CrashInfo, b: CrashInfo) -> tuple[bool, str]:
+    """Same vulnerability? error type + relative file + function (+ access).
+
+    Line numbers are deliberately excluded (a patch shifts them). When either
+    side has no symbolized source frame (e.g. a bare signal in a release build)
+    only the error type can be compared, and the basis says so.
+    """
+    ia, ib = a.identity(), b.identity()
+    if ia[0] != ib[0]:
+        return False, "different error type"
+    if ia[1] is None or ib[1] is None:
+        return True, "type-only (no symbolized location on one side)"
+    if (ia[1], ia[2]) != (ib[1], ib[2]):
+        return False, "same type, different location"
+    if ia[3] and ib[3] and ia[3] != ib[3]:
+        return False, "same location, different access kind"
+    return True, "type+file+function"
 
 
-# --- functional oracle ----------------------------------------------------
+def _mode_verdict(b_ex: Execution, p_ex: Execution, graceful: list[int]) -> dict:
+    bs, bd = base_state(b_ex)
+    ps, pd = patched_state(p_ex, graceful)
+    v, basis = None, None
+    if bs == B_CRASH:
+        if ps == P_CRASH:
+            same, basis = same_crash(b_ex.crash, p_ex.crash)
+            v = VULN_REMAINS if same else NEW_ISSUE
+        elif ps == P_CLEAN:
+            v = FIXED
+        else:
+            v = INCONCLUSIVE
+    elif bs == B_NOCRASH:
+        v = {P_CRASH: NEW_ISSUE, P_CLEAN: NOT_TRIGGERED}.get(ps, INCONCLUSIVE)
+    else:
+        # base gave no usable evidence in this mode. If patched is clean this
+        # mode simply has no baseline (it must not veto another mode's FIXED);
+        # an unclassified patched run still blocks.
+        v = {P_CRASH: NEW_ISSUE, P_CLEAN: NO_BASELINE}.get(ps, INCONCLUSIVE)
+    return {"verdict": v, "base_state": bs, "base_detail": bd,
+            "patched_state": ps, "patched_detail": pd, "identity_basis": basis}
+
+
+def identity_matches(expected, observed: tuple) -> tuple[bool, str]:
+    """Compare a recorded regression identity (type, file, function, access)
+    with the identity observed on base. Line numbers are never compared."""
+    exp = tuple(expected) + (None,) * (4 - len(expected))
+    if exp[0] != observed[0]:
+        return False, f"error type {observed[0]!r} != recorded {exp[0]!r}"
+    if exp[1] is not None and observed[1] is not None and exp[1] != observed[1]:
+        return False, f"file {observed[1]!r} != recorded {exp[1]!r}"
+    if exp[1] is not None and observed[1] is None:
+        return False, f"no symbolized location (recorded {exp[1]!r})"
+    if exp[2] is not None and observed[2] is not None and exp[2] != observed[2]:
+        return False, f"function {observed[2]!r} != recorded {exp[2]!r}"
+    if exp[3] and observed[3] and exp[3] != observed[3]:
+        return False, f"access {observed[3]!r} != recorded {exp[3]!r}"
+    return True, "identity matches the recorded one"
+
+
+def _expected_mode(origin: dict) -> str:
+    m = origin.get("expected_mode")
+    if m in MODES:
+        return m
+    ident = origin.get("expected_identity") or []
+    return "sanitized" if len(ident) > 1 and ident[1] else "release"
+
+
+NO_BASELINE = "NO_BASELINE"
+_ORDER = [VULN_REMAINS, NEW_ISSUE, INCONCLUSIVE, FIXED, NO_BASELINE, NOT_TRIGGERED]
+
+
+def classify_security_test(record: TestRecord, default_graceful: list[int] = (0,)) -> Finding:
+    graceful = _graceful(record.test, list(default_graceful))
+    per_mode = {}
+    for m in MODES:
+        b, p = record.get("base", m), record.get("patched", m)
+        if b is not None and p is not None:
+            per_mode[m] = _mode_verdict(b, p, graceful)
+    if not per_mode:
+        return Finding(record.test.id, "security", INCONCLUSIVE,
+                       note="no matching base/patched executions available")
+
+    verdicts = [d["verdict"] for d in per_mode.values()]
+    status = next(s for s in _ORDER if s in verdicts)
+    decisive = next(m for m in MODES if m in per_mode and per_mode[m]["verdict"] == status)
+    b_ex, p_ex = record.get("base", decisive), record.get("patched", decisive)
+
+    if status in (VULN_REMAINS, NEW_ISSUE):
+        evidence_ex = p_ex
+    elif status == FIXED:
+        evidence_ex = b_ex
+    else:
+        evidence_ex = None
+
+    notes = {
+        VULN_REMAINS: "same crash (" + str(per_mode[decisive]["identity_basis"]) +
+                      ") still reproduces on the patched version",
+        NEW_ISSUE: "patched version shows a confirmed crash that differs from / "
+                   "is absent on the base version",
+        FIXED: "crash reproduced on base is not observed on patched; patched exited "
+               "gracefully (scope: this input, this suite)",
+        NOT_TRIGGERED: "no crash on base or patched for this input",
+        INCONCLUSIVE: "; ".join(f"{m}: base {d['base_state']} ({d['base_detail']}), "
+                                f"patched {d['patched_state']} ({d['patched_detail']})"
+                                for m, d in per_mode.items() if d["verdict"] == INCONCLUSIVE),
+    }
+    if status == NO_BASELINE:
+        status = INCONCLUSIVE
+        notes[INCONCLUSIVE] = ("base produced no classifiable evidence in any mode: " +
+                               "; ".join(f"{m}: {d['base_detail']}" for m, d in per_mode.items()))
+    identity_mismatch = None
+    origin = record.test.regression_origin or {}
+    if origin.get("expected_identity"):
+        # An auto-generated regression test is only valid evidence if the base
+        # still fails with the RECORDED error (type/file/function/access).
+        em = _expected_mode(origin)
+        bex = record.get("base", em)
+        if bex is not None and bex.crash.state == STATE_CRASH:
+            ok, why = identity_matches(origin["expected_identity"], bex.crash.identity())
+            if not ok:
+                identity_mismatch = f"[{em}] {why}"
+        if identity_mismatch and status in (FIXED, VULN_REMAINS, NEW_ISSUE, NOT_TRIGGERED):
+            status = INCONCLUSIVE
+            notes[INCONCLUSIVE] = ("regression test: base crash differs from the recorded "
+                                   "identity (" + identity_mismatch + "); not adjudicated")
+    if status == NOT_TRIGGERED and record.test.is_known_crasher:
+        status = INCONCLUSIVE
+        notes[INCONCLUSIVE] = "known crasher did not reproduce on base in any build mode; " \
+                              "baseline not established"
+    if status == INCONCLUSIVE and record.test.regression_origin:
+        # an auto-generated regression test whose recorded base differs from the
+        # current base is stale, not evidence about this patch.
+        if record.test.regression_origin.get("base_drift"):
+            status = STALE
+            notes[STALE] = "regression test recorded against a different base source; not adjudicated"
+
+    f = Finding(
+        test_id=record.test.id, axis="security", status=status,
+        error_type=evidence_ex.crash.error_type if evidence_ex else None,
+        detection=evidence_ex.crash.detection if evidence_ex else None,
+        base_evidence=b_ex.crash.summary() if b_ex else None,
+        patched_evidence=p_ex.crash.summary() if p_ex else None,
+        note=notes.get(status, ""),
+    )
+    f.per_mode = per_mode
+    f.decisive_mode = decisive
+    bcrash = next((record.get("base", m) for m in MODES
+                   if record.get("base", m) is not None
+                   and record.get("base", m).crash.state == STATE_CRASH), None)
+    f.base_identity = bcrash.crash.identity()[:3] if bcrash else None
+    return f
+
+
+# ----------------------------------------------------------------- functional
 
 def oracle_pass(ex: Execution | None, test: TestCase) -> tuple[bool, str]:
-    """Check an execution against the test's *independent* expectation.
-
-    Importantly this never consults the patched version's output as truth;
-    `test` carries the reference expectation defined at design time.
-    """
     if ex is None:
         return False, "no execution"
     run = ex.run
     if run.timed_out:
         return False, "timed out"
+    if ex.crash.state == STATE_CRASH:
+        return False, f"crashed ({ex.crash.error_type})"
     expect_exit = test.expect_exit if test.expect_exit is not None else 0
     if run.exit_code != expect_exit:
         got = run.exit_code if run.exit_code is not None else f"signal {run.signal_name}"
         return False, f"exit {got} != expected {expect_exit}"
     if test.stdout_equals is not None and run.stdout != test.stdout_equals:
-        return False, "stdout did not equal expected"
+        return False, f"stdout {run.stdout[:80]!r} != expected {test.stdout_equals[:80]!r}"
     for needle in test.stdout_contains:
         if needle not in run.stdout:
             return False, f"stdout missing {needle!r}"
@@ -121,158 +245,110 @@ def oracle_pass(ex: Execution | None, test: TestCase) -> tuple[bool, str]:
     return True, "ok"
 
 
-# --- per-test classification ----------------------------------------------
+def classify_functional_test(record: TestRecord) -> list[Finding]:
+    """Functional verdict (+ a security NEW_ISSUE if a valid input newly crashes)."""
+    per_mode = {}
+    for m in MODES:
+        b, p = record.get("base", m), record.get("patched", m)
+        if b is None or p is None:
+            continue
+        bo, br = oracle_pass(b, record.test)
+        po, pr = oracle_pass(p, record.test)
+        per_mode[m] = {"base_pass": bo, "base_reason": br,
+                       "patched_pass": po, "patched_reason": pr}
+    out: list[Finding] = []
+    if not per_mode:
+        out.append(Finding(record.test.id, "functional", FUNC_BASELINE_BROKEN,
+                           note="no matching executions"))
+        return out
 
-def classify_security_test(record: TestRecord) -> Finding:
-    base_obs, base_ex = _crash_in_any_mode(record, "base")
-    patched_obs, patched_ex = _crash_in_any_mode(record, "patched")
+    regress = [m for m, d in per_mode.items() if d["base_pass"] and not d["patched_pass"]]
+    broken = [m for m, d in per_mode.items() if not d["base_pass"]]
+    if regress:
+        m = regress[0]
+        status, note = FUNC_REGRESSION, (f"valid input passed on base but failed on patched "
+                                          f"[{m}]: {per_mode[m]['patched_reason']}")
+    elif broken:
+        m = broken[0]
+        status, note = FUNC_BASELINE_BROKEN, (f"baseline failed its own oracle [{m}]: "
+                                               f"{per_mode[m]['base_reason']}")
+    else:
+        status, note = FUNC_OK, "behaviour preserved in every build mode"
+    f = Finding(record.test.id, "functional", status, note=note)
+    f.per_mode = per_mode
+    out.append(f)
 
-    base_ev = base_ex.crash.summary() if base_ex else (
-        _evidence(record.executions, "base").crash.summary()
-        if _evidence(record.executions, "base") else None)
-    patched_ev = patched_ex.crash.summary() if patched_ex else (
-        _evidence(record.executions, "patched").crash.summary()
-        if _evidence(record.executions, "patched") else None)
-
-    err = (base_ex or patched_ex).crash.error_type if (base_ex or patched_ex) else None
-    det = (base_ex or patched_ex).crash.detection if (base_ex or patched_ex) else None
-
-    if not base_obs:
-        # Baseline did not reproduce the error for this input.
-        if patched_obs:
-            # Crash on patched but not base -> a genuinely new, confirmed issue.
-            return Finding(
-                test_id=record.test.id, axis="security", status=NEW_ISSUE,
-                error_type=patched_ex.crash.error_type,
-                detection=patched_ex.crash.detection,
-                base_evidence=base_ev, patched_evidence=patched_ev,
-                note="crash confirmed on patched version but not reproduced on base",
-            )
-        # Neither crashed. For a designated known crasher this is a problem
-        # (can't establish a baseline); otherwise it's simply a clean input.
-        if record.test.is_known_crasher:
-            return Finding(
-                test_id=record.test.id, axis="security", status=INCONCLUSIVE,
-                error_type=None, detection=None,
-                base_evidence=base_ev, patched_evidence=patched_ev,
-                note="known crasher did not reproduce on base; baseline not established",
-            )
-        return Finding(
-            test_id=record.test.id, axis="security", status=FIXED,
-            error_type=None, detection=None,
-            base_evidence=base_ev, patched_evidence=patched_ev,
-            note="no crash on base or patched for this security input",
-        )
-
-    # base_obs is True from here.
-    if patched_obs:
-        if _same_vuln_class(base_ex.crash, patched_ex.crash):
-            return Finding(
-                test_id=record.test.id, axis="security", status=VULN_REMAINS,
-                error_type=patched_ex.crash.error_type,
-                detection=patched_ex.crash.detection,
-                base_evidence=base_ev, patched_evidence=patched_ev,
-                note="same error class still reproduces after patching",
-            )
-        # Different class on patched -> original may be gone but a new one appeared.
-        return Finding(
-            test_id=record.test.id, axis="security", status=NEW_ISSUE,
-            error_type=patched_ex.crash.error_type,
-            detection=patched_ex.crash.detection,
-            base_evidence=base_ev, patched_evidence=patched_ev,
-            note="patched version crashes with a different error class than base",
-        )
-
-    # base crashed, patched did not -> fixed for this input.
-    return Finding(
-        test_id=record.test.id, axis="security", status=FIXED,
-        error_type=base_ex.crash.error_type, detection=base_ex.crash.detection,
-        base_evidence=base_ev, patched_evidence=patched_ev,
-        note="error reproduced on base is no longer observed on patched (this input)",
-    )
+    # A valid/boundary input that crashes only on the patched version is a
+    # confirmed NEW security issue, independent of the functional verdict.
+    for m in MODES:
+        b, p = record.get("base", m), record.get("patched", m)
+        if b is None or p is None:
+            continue
+        if p.crash.state == STATE_CRASH and b.crash.state != STATE_CRASH:
+            nf = Finding(f"{record.test.id}", "security", NEW_ISSUE,
+                         error_type=p.crash.error_type, detection=p.crash.detection,
+                         base_evidence=b.crash.summary(), patched_evidence=p.crash.summary(),
+                         note=f"functional input crashes only on the patched version [{m}]")
+            nf.per_mode = {m: {"verdict": NEW_ISSUE}}
+            nf.decisive_mode = m
+            out.append(nf)
+            break
+    return out
 
 
-def classify_functional_test(record: TestRecord) -> Finding:
-    # Functional correctness is judged on the normal (release) binary first;
-    # fall back to sanitized only if release is unavailable.
-    base_ex = record.get("base", _REL) or record.get("base", _SAN)
-    patched_ex = record.get("patched", _REL) or record.get("patched", _SAN)
+# ------------------------------------------------------------ post-processing
 
-    base_ok, base_reason = oracle_pass(base_ex, record.test)
-    patched_ok, patched_reason = oracle_pass(patched_ex, record.test)
+def apply_stability(f: Finding, runs: list[str], expected: str) -> None:
+    """Fold the mandatory replay results into the verdict.
 
-    base_ev = {"oracle_pass": base_ok, "reason": base_reason,
-               "exit_code": base_ex.run.exit_code if base_ex else None,
-               "signal": base_ex.run.signal_name if base_ex else None}
-    patched_ev = {"oracle_pass": patched_ok, "reason": patched_reason,
-                  "exit_code": patched_ex.run.exit_code if patched_ex else None,
-                  "signal": patched_ex.run.signal_name if patched_ex else None}
+    runs: one token per replay; expected: the token every replay must yield.
+    Any deviation turns the finding INCONCLUSIVE (unstable).
+    """
+    stable = len(runs) > 0 and all(r == expected for r in runs)
+    f.stability = dict(f.stability or {}, replays=runs, expected=expected,
+                       stable=stable, count=len(runs))
+    if not stable:
+        f.note = (f"UNSTABLE: was {f.status}; replays {runs} did not all match "
+                  f"{expected!r}. " + f.note)
+        f.status = INCONCLUSIVE
 
-    if not base_ok:
-        return Finding(
-            test_id=record.test.id, axis="functional", status=FUNC_BASELINE_BROKEN,
-            base_evidence=base_ev, patched_evidence=patched_ev,
-            note=f"baseline failed its own oracle ({base_reason}); cannot attribute to patch",
-        )
-    if base_ok and not patched_ok:
-        return Finding(
-            test_id=record.test.id, axis="functional", status=FUNC_REGRESSION,
-            base_evidence=base_ev, patched_evidence=patched_ev,
-            note=f"valid input passed on base but failed on patched ({patched_reason})",
-        )
-    return Finding(
-        test_id=record.test.id, axis="functional", status=FUNC_OK,
-        base_evidence=base_ev, patched_evidence=patched_ev,
-        note="behaviour preserved on patched",
-    )
-
-
-# --- suite aggregation ----------------------------------------------------
 
 def refine_incomplete_fix(findings: list[Finding]) -> None:
-    """Relabel VULN_REMAINS as INCOMPLETE_FIX when at least one sibling of the
-    same error class was FIXED -- i.e. the patch addressed one entry point but
-    the same vulnerability class is still reachable via another input."""
-    fixed_classes = {
-        f.error_type for f in findings
-        if f.axis == "security" and f.status == FIXED and f.error_type
-    }
+    """VULN_REMAINS -> INCOMPLETE_FIX when another input exposing the SAME base
+    vulnerability (error type + file + function) was FIXED by this patch."""
+    fixed_ids = {tuple(f.base_identity) for f in findings
+                 if f.axis == "security" and f.status == FIXED and f.base_identity}
     for f in findings:
-        if f.axis == "security" and f.status == VULN_REMAINS and f.error_type in fixed_classes:
+        if f.axis == "security" and f.status == VULN_REMAINS and f.base_identity \
+                and tuple(f.base_identity) in fixed_ids:
             f.status = INCOMPLETE_FIX
-            f.note = ("original entry point fixed, but the same vulnerability "
-                      "class is still reachable via a different input")
+            f.note = ("one input exposing this vulnerability is blocked, but the same "
+                      "vulnerability (same type/file/function) is still reachable via this input")
 
 
 def aggregate_exit_code(findings: list[Finding], analysis_complete: bool) -> int:
-    """Collapse all findings into a single CI exit code using the documented
-    priority 40 > 20 > 10 > 30 > 0."""
+    """30 > 10 > 20 > 40 > 0. PASS additionally requires that at least one known
+    crasher was reproduced on base and stably FIXED on patched."""
     codes: list[int] = []
-    security_conclusive = False
-    baseline_reproduced = False
-
+    baseline_fixed = False
     for f in findings:
         if f.axis == "security":
             if f.status in (VULN_REMAINS, INCOMPLETE_FIX, NEW_ISSUE):
                 codes.append(exitcodes.VULN_OR_SECURITY)
-                security_conclusive = True
-            elif f.status == FIXED and f.error_type is not None:
-                baseline_reproduced = True
-                security_conclusive = True
             elif f.status == INCONCLUSIVE:
                 codes.append(exitcodes.INCONCLUSIVE)
+            elif f.status == FIXED:
+                if f.stability is None or not f.stability.get("stable"):
+                    codes.append(exitcodes.INCONCLUSIVE)   # never PASS unverified
+                else:
+                    baseline_fixed = True
         elif f.axis == "functional":
             if f.status == FUNC_REGRESSION:
                 codes.append(exitcodes.FUNC_REGRESSION)
             elif f.status == FUNC_BASELINE_BROKEN:
                 codes.append(exitcodes.INCONCLUSIVE)
-
     if not analysis_complete:
         codes.append(exitcodes.INCONCLUSIVE)
-
-    # If no security finding ever established a baseline crash and nothing
-    # else fired, we cannot claim PASS honestly.
-    if not security_conclusive and not codes:
+    if not baseline_fixed:
         codes.append(exitcodes.INCONCLUSIVE)
-
     return exitcodes.resolve(codes)

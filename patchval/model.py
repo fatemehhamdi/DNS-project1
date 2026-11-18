@@ -39,6 +39,8 @@ VULN_REMAINS = "VULN_REMAINS"
 INCOMPLETE_FIX = "INCOMPLETE_FIX"
 NEW_ISSUE = "NEW_ISSUE"
 INCONCLUSIVE = "INCONCLUSIVE"
+NOT_TRIGGERED = "NOT_TRIGGERED"   # security probe that crashes neither version
+STALE = "STALE"                   # regression test recorded against another base
 # Finding status (functional axis)
 FUNC_REGRESSION = "FUNC_REGRESSION"
 FUNC_OK = "FUNC_OK"
@@ -59,10 +61,14 @@ class Correlation:
     matched_functions: list[str] = field(default_factory=list)
     matched_lines: list[str] = field(default_factory=list)
     explanation: str = ""
+    relation: str | None = None          # crash_site_line | crash_site_function | caller_function | file_only
+    side: str | None = None              # base | patched
 
     def summary(self) -> dict:
         return {
             "confidence": self.confidence,
+            "relation": self.relation,
+            "side": self.side,
             "matched_files": self.matched_files,
             "matched_functions": self.matched_functions,
             "matched_lines": self.matched_lines,
@@ -84,12 +90,17 @@ class Finding:
     stability: dict | None = None    # replay stability info
     reproducer: dict | None = None   # reproducer bundle path etc.
     note: str = ""
+    per_mode: dict = field(default_factory=dict)      # mode -> verdict details
+    decisive_mode: str | None = None
+    base_identity: tuple | None = None                # (type, relpath, function)
 
     def summary(self) -> dict:
         return {
             "test_id": self.test_id,
             "axis": self.axis,
             "status": self.status,
+            "decisive_mode": self.decisive_mode,
+            "per_mode": self.per_mode,
             "error_type": self.error_type,
             "detection": self.detection,
             "correlation": self.correlation.summary() if self.correlation else None,
