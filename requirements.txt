@@ -1,0 +1,3 @@
+# patchval runtime dependency.
+# Only PyYAML is required (JSON configs work with the standard library alone).
+PyYAML>=5.3

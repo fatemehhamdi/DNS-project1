@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+_runs/
+work/
+*.o
+*.bin
+report*.json
