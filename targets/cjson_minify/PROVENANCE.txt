@@ -1,0 +1,10 @@
+cJSON Minify example provenance
+
+Upstream: https://github.com/DaveGamble/cJSON
+Version: v1.7.11 (93688cbe72b190300d1be6b98e86b772df9b9ead)
+License: MIT (see LICENSE)
+The harness in correct/harness.c belongs to this project.
+
+Upstream Git blob IDs:
+  correct/cJSON.c  b0bc3e874e8c9da7b5c529963f3e5263c88721d7
+  correct/cJSON.h  daf31289fe27692be8a4d79375149278fadd0f9c
