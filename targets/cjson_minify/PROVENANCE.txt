@@ -1,10 +1,25 @@
-cJSON Minify example provenance
+cJSON target -- provenance and independent verification
+=======================================================
 
-Upstream: https://github.com/DaveGamble/cJSON
-Version: v1.7.11 (93688cbe72b190300d1be6b98e86b772df9b9ead)
-License: MIT (see LICENSE)
-The harness in correct/harness.c belongs to this project.
+Upstream: https://github.com/DaveGamble/cJSON  (MIT license, see LICENSE)
+Vulnerability: out-of-bounds read/write in cJSON_Minify on unterminated
+comments / string literals (upstream issue #338), fixed by commit a43fa56
+"Rewrite cJSON_Minify, fixing buffer overflows" and released in v1.7.11.
 
-Upstream Git blob IDs:
-  correct/cJSON.c  b0bc3e874e8c9da7b5c529963f3e5263c88721d7
-  correct/cJSON.h  daf31289fe27692be8a4d79375149278fadd0f9c
+base/      = cJSON v1.7.10   (tag commit c69134d01746dcf551dd7724b4edb12f922eb0d1)
+correct/   = cJSON v1.7.11   (tag commit 93688cbe72b190300d1be6b98e86b772df9b9ead)
+incomplete/, regression/ = v1.7.10 with ONE deliberately scoped edit to cJSON_Minify
+harness.c  = our CLI driver (identical in all four versions)
+
+The vendored files are byte-identical to upstream (git blob ids):
+  base/cJSON.c     74df6ec7a1d0b44f4c8b2849cdae9dcd4c6fd2a5  == v1.7.10:cJSON.c
+  base/cJSON.h     3279f6ba5d80373625992b860e78d1aba5081183  == v1.7.10:cJSON.h
+  correct/cJSON.c  b0bc3e874e8c9da7b5c529963f3e5263c88721d7  == v1.7.11:cJSON.c
+  correct/cJSON.h  daf31289fe27692be8a4d79375149278fadd0f9c  == v1.7.11:cJSON.h
+
+Verify yourself:
+  git clone https://github.com/DaveGamble/cJSON.git /tmp/cjson
+  for p in "base v1.7.10" "correct v1.7.11"; do set -- $p
+    for f in cJSON.c cJSON.h; do
+      [ "$(git -C /tmp/cjson show $2:$f | git hash-object --stdin)" = "$(git hash-object $1/$f)" ] \
+        && echo "$1/$f OK" || echo "$1/$f MISMATCH"; done; done

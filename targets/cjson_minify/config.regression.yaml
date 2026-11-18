@@ -1,0 +1,71 @@
+name: cjson_minify-regression
+language: c
+
+versions:
+  base:
+    path: base
+  patched:
+    path: regression
+
+build:
+  command: "gcc {cflags} -I{src} {src}/cJSON.c {src}/harness.c -o {out}"
+  binary: "{out}"
+  cflags_release: "-O2 -g"
+  cflags_sanitized: "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
+
+input:
+  mode: stdin
+
+run:
+  sandbox: auto            # bwrap > unshare > rlimits-only
+  replays: 3
+  graceful_exit_codes: [0]
+  timeout_sec: 15
+  mem_limit_mb: 1024
+
+diff:
+  mode: auto
+
+# auto-generated regression tests are stored here and re-run on every later run
+regression:
+  suite: regression/suite.json
+
+# Expected outputs are the independently-known minified forms of each input
+# (whitespace outside string literals removed, whitespace inside preserved).
+tests:
+  functional:
+    - id: valid_simple
+      kind: valid
+      input_file: tests/valid_simple.json
+      expect:
+        exit_code: 0
+        stdout_equals: '{"a":1,"b":[1,2,3]}'
+    - id: valid_string_space
+      kind: valid
+      input_file: tests/valid_string_space.json
+      expect:
+        exit_code: 0
+        stdout_equals: '{"full name":"John Doe"}'
+    - id: valid_nested
+      kind: valid
+      input_file: tests/valid_nested.json
+      expect:
+        exit_code: 0
+        stdout_equals: '[{"x":1},{"y":2}]'
+    - id: boundary_empty
+      kind: boundary
+      input_file: tests/boundary_empty.json
+      expect:
+        exit_code: 0
+        stdout_equals: '{}'
+  security:
+    - id: crash_comment
+      kind: security
+      description: "unterminated /* comment makes cJSON_Minify read/write past the buffer (issue #338)"
+      input_file: tests/crash_comment.json
+      known_crasher: true
+    - id: crash_string
+      kind: security
+      description: "unterminated string literal overflows during minification (issue #338)"
+      input_file: tests/crash_string.json
+      known_crasher: true

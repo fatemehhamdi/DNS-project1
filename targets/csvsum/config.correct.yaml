@@ -1,0 +1,77 @@
+name: csvsum-correct
+language: c
+
+versions:
+  base:
+    path: base
+  patched:
+    path: correct
+
+build:
+  command: "gcc {cflags} {src}/csvsum.c -o {out}"
+  binary: "{out}"
+  cflags_release: "-O2 -g"
+  cflags_sanitized: "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
+
+input:
+  mode: stdin
+
+run:
+  sandbox: auto            # bwrap > unshare > rlimits-only
+  replays: 3
+  graceful_exit_codes: [0]
+  timeout_sec: 10
+  mem_limit_mb: 512
+
+diff:
+  mode: auto
+
+# auto-generated regression tests are stored here and re-run on every later run
+regression:
+  suite: regression/suite.json
+
+# Independent reference oracle: expected sums were computed by hand from the
+# CSV contents, NOT taken from any program's output.
+tests:
+  functional:
+    - id: valid_basic
+      kind: valid
+      input_file: tests/valid_basic.csv
+      expect:
+        exit_code: 0
+        stdout_equals: "a=5\nb=7\nc=9\n"
+    - id: valid_two
+      kind: valid
+      input_file: tests/valid_two.csv
+      expect:
+        exit_code: 0
+        stdout_equals: "x=7.5\ny=25.5\n"
+    - id: boundary_header_only
+      kind: boundary
+      input_file: tests/boundary_header_only.csv
+      expect:
+        exit_code: 0
+        stdout_equals: "a=0\nb=0\nc=0\n"
+    - id: boundary_blank_line
+      kind: boundary
+      input_file: tests/boundary_blank_line.csv
+      expect:
+        exit_code: 0
+        stdout_equals: "a=8\nb=10\nc=12\n"
+    - id: invalid_nonnumeric
+      kind: invalid
+      input_file: tests/invalid_nonnumeric.csv
+      expect:
+        exit_code: 0
+        stdout_equals: "a=0\nb=0\nc=0\n"
+  security:
+    - id: crash_wide
+      kind: security
+      description: "data row with 64 fields overflows the 3-element sums heap array"
+      input_file: tests/crash_wide.csv
+      known_crasher: true
+    - id: crash_narrow
+      kind: security
+      description: "data row with 10 fields (more than header, <=32) overflows sums"
+      input_file: tests/crash_narrow.csv
+      known_crasher: true

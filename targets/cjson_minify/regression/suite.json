@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "tests": [
+    {
+      "id": "reg_crash_comment_766e0153",
+      "input": "inputs/reg_crash_comment_766e0153.bin",
+      "input_sha256": "766e0153d3f7ec95c97e755b1ea7b1681566923b9299365fdc8399443ca20c1d",
+      "minimized": true,
+      "expected_identity": [
+        "heap-buffer-overflow",
+        "cJSON.c",
+        "cJSON_Minify",
+        "READ"
+      ],
+      "expected_error_type": "heap-buffer-overflow",
+      "expected_detection": "sanitizer_asan",
+      "assert": {
+        "base": "crash with expected identity",
+        "patched": "no crash, graceful exit"
+      },
+      "origin": {
+        "config": "cjson_minify-correct",
+        "test": "crash_comment",
+        "base_tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "created_utc": "2026-11-17T23:49:58+00:00"
+      }
+    },
+    {
+      "id": "reg_crash_string_8a331fdd",
+      "input": "inputs/reg_crash_string_8a331fdd.bin",
+      "input_sha256": "8a331fdde7032f33a71e1b2e257d80166e348e00fcb17914f48bdb57a1c63007",
+      "minimized": true,
+      "expected_identity": [
+        "heap-buffer-overflow",
+        "cJSON.c",
+        "cJSON_Minify",
+        "READ"
+      ],
+      "expected_error_type": "heap-buffer-overflow",
+      "expected_detection": "sanitizer_asan",
+      "assert": {
+        "base": "crash with expected identity",
+        "patched": "no crash, graceful exit"
+      },
+      "origin": {
+        "config": "cjson_minify-correct",
+        "test": "crash_string",
+        "base_tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "created_utc": "2026-11-17T23:49:59+00:00"
+      }
+    }
+  ]
+}

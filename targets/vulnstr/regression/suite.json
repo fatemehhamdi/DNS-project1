@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "tests": [
+    {
+      "id": "reg_crash_name_97de6943",
+      "input": "inputs/reg_crash_name_97de6943.bin",
+      "input_sha256": "97de694399399a6e458bbb0392d4417e8bb761490a7ca0356b1d29ac78abb564",
+      "minimized": true,
+      "expected_identity": [
+        "buffer-overflow",
+        "vulnstr.c",
+        "store_value",
+        "WRITE"
+      ],
+      "expected_error_type": "buffer-overflow",
+      "expected_detection": "sanitizer_ubsan",
+      "assert": {
+        "base": "crash with expected identity",
+        "patched": "no crash, graceful exit"
+      },
+      "origin": {
+        "config": "vulnstr-correct",
+        "test": "crash_name",
+        "base_tree_sha256": "99169265e77f9f370bf6c33fc4221aca3cc15bcc63b4732c24f88b030d243d4a",
+        "created_utc": "2026-11-17T23:45:02+00:00"
+      }
+    }
+  ]
+}

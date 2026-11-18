@@ -1,0 +1,71 @@
+name: vulnstr-regression-argv
+language: c
+
+versions:
+  base:
+    path: base
+  patched:
+    path: regression
+
+build:
+  command: "gcc {cflags} {src}/vulnstr.c -o {out}"
+  binary: "{out}"
+  cflags_release: "-O2 -g"
+  # sanitized build disables _FORTIFY_SOURCE so AddressSanitizer is the
+  # reporter and produces symbolized stack frames for correlation.
+  cflags_sanitized: "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
+
+input:
+  mode: argv              # the input CONTENT is passed, one argument per line
+  argv_split: lines
+
+run:
+  sandbox: auto            # bwrap > unshare > rlimits-only
+  replays: 3
+  graceful_exit_codes: [0]
+  timeout_sec: 10
+  mem_limit_mb: 512
+
+diff:
+  mode: auto
+
+# auto-generated regression tests are stored here and re-run on every later run
+regression:
+  suite: regression/suite.json
+
+tests:
+  functional:
+    - id: valid_name
+      kind: valid
+      input_file: tests/valid_name.txt
+      expect:
+        exit_code: 0
+        stdout_contains: "name:3"
+    - id: valid_city
+      kind: valid
+      input_file: tests/valid_city.txt
+      expect:
+        exit_code: 0
+        stdout_contains: "city:9"
+    - id: boundary_empty
+      kind: boundary
+      input_file: tests/boundary_empty.txt
+      expect:
+        exit_code: 0
+        stdout_contains: "x:0"
+    - id: invalid_noeq
+      kind: invalid
+      input_file: tests/invalid_noeq.txt
+      expect:
+        exit_code: 0
+  security:
+    - id: crash_name
+      kind: security
+      description: "long value under key 'name' overflows the stack buffer"
+      input_file: tests/crash_name.txt
+      known_crasher: true
+    - id: crash_data
+      kind: security
+      description: "long value under key 'data' overflows the stack buffer"
+      input_file: tests/crash_data.txt
+      known_crasher: true

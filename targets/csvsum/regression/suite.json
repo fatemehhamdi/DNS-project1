@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "tests": [
+    {
+      "id": "reg_crash_wide_6f6babaf",
+      "input": "inputs/reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "minimized": true,
+      "expected_identity": [
+        "heap-buffer-overflow",
+        "csvsum.c",
+        "accumulate",
+        "READ"
+      ],
+      "expected_error_type": "heap-buffer-overflow",
+      "expected_detection": "sanitizer_asan",
+      "assert": {
+        "base": "crash with expected identity",
+        "patched": "no crash, graceful exit"
+      },
+      "origin": {
+        "config": "csvsum-correct",
+        "test": "crash_wide",
+        "base_tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+        "created_utc": "2026-11-17T23:49:38+00:00"
+      }
+    }
+  ]
+}
