@@ -46,6 +46,11 @@ class TestCase:
     # For security tests: this input reproduced the known bug on the base.
     is_known_crasher: bool = False
     description: str = ""
+    # for security tests: exit codes that count as *graceful* handling by the
+    # patched version (None -> use run.graceful_exit_codes)
+    graceful_exit_codes: list[int] | None = None
+    # provenance of auto-generated regression tests
+    regression_origin: dict | None = None
 
 
 @dataclass
@@ -73,6 +78,13 @@ class Config:
     diff_mode: str                  # "auto" | "file"
     diff_file: str | None
     language: str                   # "c" | "cpp" (informational)
+    argv_split: str = "single"      # argv mode: "single" | "lines"
+    max_procs: int = 64
+    graceful_exit_codes: list[int] = field(default_factory=lambda: [0])
+    replays: int = 3
+    sandbox: str = "auto"           # auto | bwrap | unshare | none
+    regression_suite: str | None = None
+    build_timeout_sec: float = 300
 
     @property
     def all_tests(self) -> list[TestCase]:
@@ -124,8 +136,10 @@ def _parse_test(raw: dict, config_dir: str, default_kind: str) -> TestCase:
         stdout_contains=[str(s) for s in stdout_contains],
         stdout_equals=expect.get("stdout_equals"),
         stderr_contains=[str(s) for s in stderr_contains],
-        is_known_crasher=bool(raw.get("known_crasher", default_kind == "security" and raw.get("known_crasher", False))),
+        is_known_crasher=bool(raw.get("known_crasher", False)),
         description=str(raw.get("description", "")),
+        graceful_exit_codes=([int(x) for x in raw["graceful_exit_codes"]]
+                             if "graceful_exit_codes" in raw else None),
     )
 
 
@@ -161,6 +175,7 @@ def load(path: str) -> Config:
     build = _require(data, "build", "config")
     build_command = str(_require(build, "command", "build"))
     binary_rel = str(_require(build, "binary", "build"))
+    build_timeout_sec = float(build.get("timeout_sec", 300))
     cflags_release = str(build.get("cflags_release", "-O2 -g"))
     cflags_sanitized = str(build.get(
         "cflags_sanitized",
@@ -173,20 +188,35 @@ def load(path: str) -> Config:
     if input_mode not in _VALID_INPUT_MODES:
         raise ConfigError(f"input.mode must be one of {_VALID_INPUT_MODES}")
     argv_template = [str(a) for a in inp.get("argv_template", [])]
+    argv_split = str(inp.get("argv_split", "single"))
+    if argv_split not in {"single", "lines"}:
+        raise ConfigError("input.argv_split must be 'single' or 'lines'")
 
     run = data.get("run", {}) or {}
     timeout_sec = float(run.get("timeout_sec", 10))
     mem_limit_mb = int(run.get("mem_limit_mb", 512))
     if timeout_sec <= 0:
         raise ConfigError("run.timeout_sec must be positive")
+    max_procs = int(run.get("max_procs", 64))
+    graceful = [int(x) for x in run.get("graceful_exit_codes", [0])]
+    replays = int(run.get("replays", 3))
+    if replays < 3:
+        raise ConfigError("run.replays must be >= 3 (the brief requires three replays)")
+    sandbox = str(run.get("sandbox", "auto"))
+    if sandbox not in {"auto", "bwrap", "unshare", "none"}:
+        raise ConfigError("run.sandbox must be auto|bwrap|unshare|none")
+    reg = data.get("regression", {}) or {}
+    regression_suite = reg.get("suite")
+    if regression_suite is not None:
+        regression_suite = _abspath(config_dir, str(regression_suite))
 
     tests = data.get("tests", {}) or {}
     functional = [_parse_test(t, config_dir, "valid") for t in tests.get("functional", [])]
     security = [_parse_test(t, config_dir, "security") for t in tests.get("security", [])]
-    # Mark security crashers unless explicitly overridden.
-    for t in security:
-        if t.kind == "security" and not t.stdout_contains and t.expect_exit is None:
-            t.is_known_crasher = True
+    ids = [t.id for t in functional + security]
+    dup = {i for i in ids if ids.count(i) > 1}
+    if dup:
+        raise ConfigError(f"duplicate test ids: {sorted(dup)}")
 
     diff = data.get("diff", {}) or {}
     diff_mode = str(diff.get("mode", "auto"))
@@ -219,4 +249,32 @@ def load(path: str) -> Config:
         diff_mode=diff_mode,
         diff_file=diff_file,
         language=str(data.get("language", "c")),
+        argv_split=argv_split,
+        max_procs=max_procs,
+        graceful_exit_codes=graceful,
+        replays=replays,
+        sandbox=sandbox,
+        regression_suite=regression_suite,
+        build_timeout_sec=build_timeout_sec,
     )
+
+
+def with_versions(cfg: Config, base: str | None = None, patched: str | None = None,
+                  name_suffix: str | None = None) -> Config:
+    """Return a copy of cfg with the base and/or patched source dir replaced.
+
+    Used to validate patches the config author never saw (e.g. a patch file
+    applied to a copy of base on defense day)."""
+    import dataclasses
+    kw = {}
+    if base is not None:
+        if not os.path.isdir(base):
+            raise ConfigError(f"--base is not a directory: {base}")
+        kw["base"] = VersionSpec("base", os.path.abspath(base))
+    if patched is not None:
+        if not os.path.isdir(patched):
+            raise ConfigError(f"--patched is not a directory: {patched}")
+        kw["patched"] = VersionSpec("patched", os.path.abspath(patched))
+    if name_suffix:
+        kw["name"] = f"{cfg.name}+{name_suffix}"
+    return dataclasses.replace(cfg, **kw)
