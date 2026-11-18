@@ -246,7 +246,7 @@ def refine_incomplete_fix(findings: list[Finding]) -> None:
 
 def aggregate_exit_code(findings: list[Finding], analysis_complete: bool) -> int:
     """Collapse all findings into a single CI exit code using the documented
-    priority 30 > 10 > 20 > 40 > 0."""
+    priority 40 > 20 > 10 > 30 > 0."""
     codes: list[int] = []
     security_conclusive = False
     baseline_reproduced = False

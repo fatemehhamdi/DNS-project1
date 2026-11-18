@@ -23,9 +23,12 @@ from patchval.config import TestCase
 def test_exitcode_priority():
     assert exitcodes.resolve([0]) == 0
     assert exitcodes.resolve([0, 20]) == 20
-    assert exitcodes.resolve([0, 20, 10]) == 10
-    assert exitcodes.resolve([10, 20, 30, 40]) == 30   # build error wins
-    assert exitcodes.resolve([20, 40]) == 20           # regression over inconclusive
+    assert exitcodes.resolve([0, 20, 10]) == 20
+    assert exitcodes.resolve([10, 20, 30, 40]) == 40   # inconclusive wins
+    assert exitcodes.resolve([20, 40]) == 40
+    assert exitcodes.resolve([40, 10]) == 40
+    assert exitcodes.resolve([20, 10]) == 20
+    assert exitcodes.resolve([10, 30]) == 10
     assert exitcodes.resolve([40, 0]) == 40
     assert exitcodes.resolve([]) == 0
 

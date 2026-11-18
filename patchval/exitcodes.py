@@ -6,14 +6,13 @@ values are part of the tool's public contract and must be unambiguous.
 When several conditions hold at once, the *most actionable / most severe*
 engineering problem wins. The documented priority is:
 
-    30 (BUILD_OR_CONFIG_ERROR)  -- nothing could be trusted; fix this first
-    10 (VULN_REMAINS/NEW_ISSUE) -- a real security problem was confirmed
-    20 (FUNC_REGRESSION)        -- the patch broke valid behaviour
     40 (INCONCLUSIVE)           -- not enough evidence to judge
+    20 (FUNC_REGRESSION)        -- the patch broke valid behaviour
+    10 (VULN_REMAINS/NEW_ISSUE) -- a real security problem was confirmed
+    30 (BUILD_OR_CONFIG_ERROR)  -- build or configuration failure
      0 (PASS)                   -- everything required succeeded
 
-A build error outranks everything because every other verdict is derived
-from executing a build we could not actually produce.
+This order follows section 3.5 of the project specification.
 """
 
 from __future__ import annotations
@@ -25,7 +24,7 @@ BUILD_OR_CONFIG_ERROR = 30
 INCONCLUSIVE = 40
 
 # Higher number in this list == resolved earlier (wins).
-_PRIORITY = [30, 10, 20, 40, 0]
+_PRIORITY = [40, 20, 10, 30, 0]
 
 NAMES = {
     0: "PASS",
@@ -42,9 +41,11 @@ def resolve(codes) -> int:
     >>> resolve([0])
     0
     >>> resolve([0, 20, 10])
-    10
+    20
     >>> resolve([10, 20, 30])
-    30
+    20
+    >>> resolve([40, 20])
+    40
     >>> resolve([])
     0
     """
