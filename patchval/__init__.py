@@ -13,5 +13,5 @@ The tool never trusts the patched binary's own output as ground truth: the
 correctness oracle is an independent reference defined per test case.
 """
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __all__ = ["__version__"]

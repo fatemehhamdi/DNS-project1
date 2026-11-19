@@ -3,12 +3,9 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING
 
 from . import exitcodes, __version__
-
-if TYPE_CHECKING:
-    from .pipeline import PipelineResult
+from .pipeline import PipelineResult
 
 
 def to_json(result: PipelineResult) -> dict:
@@ -20,17 +17,16 @@ def to_json(result: PipelineResult) -> dict:
                     "analysis_complete": result.analysis_complete},
         "scope_note": ("Verdicts are limited to the documented test suite; absence of an "
                        "error in these tests is not proof that no vulnerability exists."),
-        "isolation": getattr(result, "isolation", {}),
-        "checks": getattr(result, "checks", {}),
+        "isolation": result.isolation,
+        "checks": result.checks,
         "builds": result.builds,
         "diff": result.diff_summary,
         "findings": [f.summary() for f in result.findings],
-        "executions": getattr(result, "executions", []),
+        "executions": result.executions,
         "hardening": result.hardening,
         "reproducers": result.reproducers,
-        "regression": {"loaded_from_suite": getattr(result, "regression_loaded", []),
+        "regression": {"loaded_from_suite": result.regression_loaded,
                        "added_to_suite": result.regression_entries},
-        "regression_tests": result.regression_entries,
         "errors": result.errors,
     }
 
@@ -46,15 +42,12 @@ def to_text(result: PipelineResult) -> str:
     L.append("=" * 76)
     L.append(f"  patchval {__version__} :: {result.config_name}")
     L.append("=" * 76)
-    L.append(f"VERDICT: exit {code} ({exitcodes.NAMES.get(code, '?')})"
-             + ("" if result.analysis_complete else "  [analysis INCOMPLETE]"))
-    iso = getattr(result, "isolation", {}) or {}
+    L.append(f"VERDICT: exit {code} ({exitcodes.NAMES.get(code, '?')})")
+    iso = result.isolation or {}
     L.append(f"Isolation: {iso.get('backend')} [{iso.get('level')}] network={iso.get('network')}"
              + (f"  ({iso.get('reason')})" if iso.get("reason") else ""))
-    checks = getattr(result, "checks", {})
-    if checks:
-        L.append(f"Checks: minimization {checks.get('minimization')}, "
-                 f"{checks.get('replays_per_finding')} replays per finding")
+    L.append(f"Checks: minimization {result.checks.get('minimization')}, "
+             f"{result.checks.get('replays_per_finding')} replays per finding")
     L.append("")
     L.append("Builds:")
     for key, b in result.builds.items():
@@ -119,8 +112,7 @@ def to_text(result: PipelineResult) -> str:
                      + ("  <-- PROTECTION WEAKENED" if h.get("protection_regressed") else ""))
         L.append("")
 
-    regression_loaded = getattr(result, "regression_loaded", [])
-    L.append(f"Regression suite: {len(regression_loaded)} test(s) loaded from earlier runs, "
+    L.append(f"Regression suite: {len(result.regression_loaded)} test(s) loaded from earlier runs, "
              f"{len(result.regression_entries)} recorded by this run.")
     if result.errors:
         L.append("Warnings / errors:")
