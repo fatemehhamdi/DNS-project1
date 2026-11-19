@@ -1,0 +1,3055 @@
+{
+  "tool": "patchval",
+  "tool_version": "2.0.0",
+  "target": "csvsum-correct+csvsum_new_issue_oob_read",
+  "verdict": {
+    "exit_code": 10,
+    "label": "VULN_OR_SECURITY",
+    "analysis_complete": true
+  },
+  "scope_note": "Verdicts are limited to the documented test suite; absence of an error in these tests is not proof that no vulnerability exists.",
+  "isolation": {
+    "backend": "bwrap",
+    "level": "full",
+    "reason": "",
+    "network": "disabled",
+    "filesystem": "read-only system + private scratch",
+    "pid_namespace": true
+  },
+  "checks": {
+    "minimization": "enabled",
+    "replays_per_finding": 3
+  },
+  "builds": {
+    "base/release": {
+      "version": "base",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "command": "gcc -O2 -g /home/claude/patchval_project/targets/csvsum/base/csvsum.c -o /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/base",
+        "tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "9afdcdc34dfb54fbc487bfa99a383369d5b1e901"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f921b13b000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f921ae00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f921b13d000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "base/sanitized": {
+      "version": "base",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/csvsum/base/csvsum.c -o /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/base",
+        "tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "9afdcdc34dfb54fbc487bfa99a383369d5b1e901"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f6f43eb0000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f6f43600000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f6f42e00000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6f42a00000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f6f43daa000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f6f43d7c000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f6f42600000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f6f43eb2000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/release": {
+      "version": "patched",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "command": "gcc -O2 -g /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c -o /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src",
+        "tree_sha256": "2c9fc1eb113a2dfbb779efeb6f0fff969d3c9334d4c25e2956de13c0c2a784b6",
+        "git_commit": null,
+        "git_dirty": null,
+        "git_tree": null
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fbd2e5e6000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbd2e200000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fbd2e5e8000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/sanitized": {
+      "version": "patched",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c -o /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src",
+        "tree_sha256": "2c9fc1eb113a2dfbb779efeb6f0fff969d3c9334d4c25e2956de13c0c2a784b6",
+        "git_commit": null,
+        "git_dirty": null,
+        "git_tree": null
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fe80dae0000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007fe80d200000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007fe80ca00000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fe80c600000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fe80d9da000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fe80d9ac000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fe80c200000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fe80dae2000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    }
+  },
+  "diff": {
+    "source": "file",
+    "files": [
+      {
+        "path": "csvsum.c",
+        "status": "modified",
+        "base_changed_lines": 2,
+        "patched_changed_lines": 8,
+        "changed_functions": [
+          "main",
+          "process_row"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "test_id": "crash_wide",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CRASH",
+          "patched_detail": "heap-buffer-overflow|main@csvsum.c:91|READ",
+          "identity_basis": "same type, different location"
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-corruption",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "patched version shows a confirmed crash that differs from / is absent on the base version"
+    },
+    {
+      "test_id": "crash_narrow",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CRASH",
+          "patched_detail": "heap-buffer-overflow|main@csvsum.c:91|READ",
+          "identity_basis": "same type, different location"
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-corruption",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "patched version shows a confirmed crash that differs from / is absent on the base version"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CRASH",
+          "patched_detail": "heap-buffer-overflow|main@csvsum.c:91|READ",
+          "identity_basis": "same type, different location"
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "patched version shows a confirmed crash that differs from / is absent on the base version"
+    },
+    {
+      "test_id": "valid_basic",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "crashed (heap-buffer-overflow)"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: crashed (heap-buffer-overflow)"
+    },
+    {
+      "test_id": "valid_basic",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE"
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "functional input crashes only on the patched version [sanitized]"
+    },
+    {
+      "test_id": "valid_two",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "crashed (heap-buffer-overflow)"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: crashed (heap-buffer-overflow)"
+    },
+    {
+      "test_id": "valid_two",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE"
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "functional input crashes only on the patched version [sanitized]"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "crashed (heap-buffer-overflow)"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: crashed (heap-buffer-overflow)"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE"
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "functional input crashes only on the patched version [sanitized]"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "crashed (heap-buffer-overflow)"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: crashed (heap-buffer-overflow)"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE"
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "functional input crashes only on the patched version [sanitized]"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "crashed (heap-buffer-overflow)"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: crashed (heap-buffer-overflow)"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "axis": "security",
+      "status": "NEW_ISSUE",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "NEW_ISSUE"
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_line",
+        "side": "patched",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "main"
+        ],
+        "matched_lines": [
+          "csvsum.c:91"
+        ],
+        "explanation": "the faulting access (main at csvsum.c:91) is on a line the patch changed"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 3,
+        "observations": [
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|main|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|main|READ"
+          }
+        ],
+        "mode": "sanitized"
+      },
+      "reproducer": null,
+      "base_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "patched_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "note": "functional input crashes only on the patched version [sanitized]"
+    }
+  ],
+  "executions": [
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0108,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/base-release.stdout",
+      "stderr_file": "logs/valid_basic/base-release.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0181,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/base-sanitized.stdout",
+      "stderr_file": "logs/valid_basic/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0099,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=9\n",
+      "stderr_tail": "total=21\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/patched-release.stdout",
+      "stderr_file": "logs/valid_basic/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1162,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x55dccea48bed bp 0x7ffd29139220 sp 0x7ffd29139210\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x55dccea48bec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7f460aa2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7f460aa2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x55dccea483a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7f460b6fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55dccea4899d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7f460aa2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f460aa2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55dccea483a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/valid_basic/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_basic/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0102,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=25.5\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/base-release.stdout",
+      "stderr_file": "logs/valid_two/base-release.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0179,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=25.5\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/base-sanitized.stdout",
+      "stderr_file": "logs/valid_two/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0098,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=25.5\n",
+      "stderr_tail": "total=33\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/patched-release.stdout",
+      "stderr_file": "logs/valid_two/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1163,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000060 at pc 0x558cbfb80bed bp 0x7ffdc526f280 sp 0x7ffdc526f270\nREAD of size 8 at 0x502000000060 thread T0\n    #0 0x558cbfb80bec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7f620e82a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7f620e82a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x558cbfb803a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x502000000060 is located 0 bytes after 16-byte region [0x502000000050,0x502000000060)\nallocated by thread T0 here:\n    #0 0x7f620f4fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x558cbfb8099d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7f620e82a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f620e82a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x558cbfb803a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa 02 fa fa fa 02 fa fa fa 00 00[fa]fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/valid_two/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_two/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0103,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/base-release.stdout",
+      "stderr_file": "logs/boundary_header_only/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.018,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_header_only/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "total=6.43634e-319\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/patched-release.stdout",
+      "stderr_file": "logs/boundary_header_only/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.116,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x55b05d7afbed bp 0x7fffba41b440 sp 0x7fffba41b430\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x55b05d7afbec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7fc3b8a2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7fc3b8a2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x55b05d7af3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7fc3b96fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55b05d7af99d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7fc3b8a2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fc3b8a2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55b05d7af3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/boundary_header_only/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_header_only/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.01,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=12\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/base-release.stdout",
+      "stderr_file": "logs/boundary_blank_line/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=12\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_blank_line/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=12\n",
+      "stderr_tail": "total=30\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/patched-release.stdout",
+      "stderr_file": "logs/boundary_blank_line/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.116,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x55d939c21bed bp 0x7ffc606d4fb0 sp 0x7ffc606d4fa0\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x55d939c21bec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7fa1ed02a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7fa1ed02a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x55d939c213a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7fa1edcfd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55d939c2199d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7fa1ed02a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fa1ed02a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55d939c213a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/boundary_blank_line/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_blank_line/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0104,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/base-release.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/base-release.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0097,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/base-sanitized.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/base-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "total=6.43634e-319\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/patched-release.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/patched-release.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1169,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x55b2730f8bed bp 0x7ffde88753a0 sp 0x7ffde8875390\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x55b2730f8bec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7fba06c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7fba06c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x55b2730f83a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7fba078fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55b2730f899d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7fba06c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fba06c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55b2730f83a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/invalid_nonnumeric/patched-sanitized.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0101,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "malloc(): corrupted top size\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-corruption",
+        "detection": "glibc_heap_check",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "glibc: malloc(): corrupted top size",
+        "fingerprint": "heap-corruption",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_wide/base-release.stdout",
+      "stderr_file": "logs/crash_wide/base-release.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1171,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x5583bcccc9fd bp 0x7ffc63c8efe0 sp 0x7ffc63c8efd0\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x5583bcccc9fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x5583bcccc9fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x5583bcccc9fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7f329182a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f329182a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x5583bcccc384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7f32924fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x5583bcccc971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7f329182a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f329182a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x5583bcccc384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_wide/base-sanitized.stdout",
+      "stderr_file": "logs/crash_wide/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0099,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=4\n",
+      "stderr_tail": "total=9\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_wide/patched-release.stdout",
+      "stderr_file": "logs/crash_wide/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1161,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x560c6974cbed bp 0x7ffd7dacef70 sp 0x7ffd7dacef60\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x560c6974cbec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7f8f3be2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7f8f3be2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x560c6974c3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7f8f3cafd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x560c6974c99d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7f8f3be2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f8f3be2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x560c6974c3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_wide/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_wide/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0103,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "malloc(): corrupted top size\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-corruption",
+        "detection": "glibc_heap_check",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "glibc: malloc(): corrupted top size",
+        "fingerprint": "heap-corruption",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_narrow/base-release.stdout",
+      "stderr_file": "logs/crash_narrow/base-release.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1162,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x563332e769fd bp 0x7ffc7d0181c0 sp 0x7ffc7d0181b0\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x563332e769fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x563332e769fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x563332e769fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7fa8f182a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7fa8f182a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x563332e76384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7fa8f24fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x563332e76971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7fa8f182a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fa8f182a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x563332e76384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_narrow/base-sanitized.stdout",
+      "stderr_file": "logs/crash_narrow/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.01,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=4\n",
+      "stderr_tail": "total=9\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_narrow/patched-release.stdout",
+      "stderr_file": "logs/crash_narrow/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1161,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x5572cb71fbed bp 0x7ffc44bd9d80 sp 0x7ffc44bd9d70\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x5572cb71fbec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7fe1c482a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7fe1c482a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x5572cb71f3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7fe1c54fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x5572cb71f99d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7fe1c482a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fe1c482a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x5572cb71f3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_narrow/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_narrow/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "8c1ed4af1b9c92af8444a9a613e7e53e823ff41d53e73e82c8f0524b07fb049f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0103,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "3=1\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/base-release.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/base-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "4bc232c4700b5423165927d3c0af4ea18489bcd2a6e084d9221a348269f25581",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1162,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000038 at pc 0x55fd677089fd bp 0x7ffd1d263140 sp 0x7ffd1d263130\nREAD of size 8 at 0x502000000038 thread T0\n    #0 0x55fd677089fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x55fd677089fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x55fd677089fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7fcc23e2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7fcc23e2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x55fd67708384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\n0x502000000038 is located 0 bytes after 8-byte region [0x502000000030,0x502000000038)\nallocated by thread T0 here:\n    #0 0x7fcc24afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55fd67708971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7fcc23e2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fcc23e2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55fd67708384 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/sanitized/target.bin+0x2384) (BuildId: 59a40f956d417c46215b12a0227d17cd8788b01f)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa 02 fa fa fa 00[fa]fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/base-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/base-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "2b1e79284893b163ccfe7b8a67fa651bf1243617402b57d58563b8b5c7fb39fc",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0098,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "3=1\n",
+      "stderr_tail": "total=1\n",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/patched-release.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/patched-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "a856e529efd6323e11fc122c56d2948512b15d4871204588060be204b9f7d23e",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1158,
+      "command": [
+        "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000038 at pc 0x56520b88cbed bp 0x7fffd9ab8cd0 sp 0x7fffd9ab8cc0\nREAD of size 8 at 0x502000000038 thread T0\n    #0 0x56520b88cbec in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91\n    #1 0x7f794622a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #2 0x7f794622a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #3 0x56520b88c3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\n0x502000000038 is located 0 bytes after 8-byte region [0x502000000030,0x502000000038)\nallocated by thread T0 here:\n    #0 0x7f7946efd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x56520b88c99d in main /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:79\n    #2 0x7f794622a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f794622a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x56520b88c3a4 in _start (/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/sanitized/target.bin+0x23a4) (BuildId: 3f8e4a2aa42a96460f5aabf79deabc639ca09774)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched_src/csvsum.c:91 in main\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa 02 fa fa fa 00[fa]fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|main@csvsum.c:91|READ",
+        "top_frames": [
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 91
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/patched-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/patched-sanitized.stderr"
+    }
+  ],
+  "hardening": {
+    "base": {
+      "binary": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/base/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "patched": {
+      "binary": "/tmp/unseen2/csvsum_new_issue_oob_read-config.correct/patched/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "changes": [],
+    "protection_regressed": false
+  },
+  "reproducers": [],
+  "regression": {
+    "loaded_from_suite": [
+      "reg_crash_wide_6f6babaf"
+    ],
+    "added_to_suite": []
+  },
+  "errors": []
+}

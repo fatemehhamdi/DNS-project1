@@ -1,0 +1,13 @@
+# vulnstr: patched version hangs on the crashing input (timeout) -> expected 40 (INCONCLUSIVE), never PASS
+--- a/vulnstr.c
++++ b/vulnstr.c
+@@ -38,6 +38,9 @@
+     const char *value = eq + 1;
+ 
+     char val[32];
++    while (strlen(value) >= sizeof val) {
++        /* waits forever instead of rejecting the record */
++    }
+     store_value(val, value);
+     printf("%s:%d\n", key, (int)strlen(val));
+ }

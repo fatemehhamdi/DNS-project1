@@ -1,0 +1,2132 @@
+{
+  "tool": "patchval",
+  "tool_version": "2.0.0",
+  "target": "cjson_minify-regression",
+  "verdict": {
+    "exit_code": 20,
+    "label": "FUNC_REGRESSION",
+    "analysis_complete": true
+  },
+  "scope_note": "Verdicts are limited to the documented test suite; absence of an error in these tests is not proof that no vulnerability exists.",
+  "isolation": {
+    "backend": "bwrap",
+    "level": "full",
+    "reason": "",
+    "network": "disabled",
+    "filesystem": "read-only system + private scratch",
+    "pid_namespace": true
+  },
+  "checks": {
+    "minimization": "enabled",
+    "replays_per_finding": 3
+  },
+  "builds": {
+    "base/release": {
+      "version": "base",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/cjson_minify_regression/base/release/target.bin",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "command": "gcc -O2 -g -I/home/claude/patchval_project/targets/cjson_minify/base /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c /home/claude/patchval_project/targets/cjson_minify/base/harness.c -o /tmp/runall2/cjson_minify_regression/base/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/base",
+        "tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "f985467a6d17f0cc976f25da3c25dc291219687a"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f3c491b1000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3c48e00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f3c491b3000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "base/sanitized": {
+      "version": "base",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -I/home/claude/patchval_project/targets/cjson_minify/base /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c /home/claude/patchval_project/targets/cjson_minify/base/harness.c -o /tmp/runall2/cjson_minify_regression/base/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/base",
+        "tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "f985467a6d17f0cc976f25da3c25dc291219687a"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fb519711000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007fb518e00000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007fb518600000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb518200000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fb5194e3000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fb518dd2000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fb517e00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fb519713000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/release": {
+      "version": "patched",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/cjson_minify_regression/patched/release/target.bin",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "command": "gcc -O2 -g -I/home/claude/patchval_project/targets/cjson_minify/regression /home/claude/patchval_project/targets/cjson_minify/regression/cJSON.c /home/claude/patchval_project/targets/cjson_minify/regression/harness.c -o /tmp/runall2/cjson_minify_regression/patched/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/regression",
+        "tree_sha256": "79454bb3f2cf805c4fe282bbcca5295d7d1a439e24b94023c258d27507b7ab19",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "6bf3ad89c4dc95c6b1f8c1712f255ec7cc6f7581"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f6c2e50e000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6c2e000000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f6c2e510000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/sanitized": {
+      "version": "patched",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -I/home/claude/patchval_project/targets/cjson_minify/regression /home/claude/patchval_project/targets/cjson_minify/regression/cJSON.c /home/claude/patchval_project/targets/cjson_minify/regression/harness.c -o /tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/regression",
+        "tree_sha256": "79454bb3f2cf805c4fe282bbcca5295d7d1a439e24b94023c258d27507b7ab19",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "6bf3ad89c4dc95c6b1f8c1712f255ec7cc6f7581"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f714b44a000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f714ac00000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f714a400000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f714a000000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f714ab17000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f714b2d9000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f7149c00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f714b44c000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    }
+  },
+  "diff": {
+    "source": "tree",
+    "files": [
+      {
+        "path": "cJSON.c",
+        "status": "modified",
+        "base_changed_lines": 44,
+        "patched_changed_lines": 4,
+        "changed_functions": [
+          "cJSON_Minify"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "test_id": "crash_comment",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "cJSON.c"
+        ],
+        "matched_functions": [
+          "cJSON_Minify"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function cJSON_Minify (cJSON.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 2,
+          "minimized_size": 2,
+          "iterations": 2,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_comment",
+        "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_comment/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "crash_string",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "cJSON.c"
+        ],
+        "matched_functions": [
+          "cJSON_Minify"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function cJSON_Minify (cJSON.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 4,
+          "minimized_size": 1,
+          "iterations": 4,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_string",
+        "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_string/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "reg_crash_string_8a331fdd",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "cJSON.c"
+        ],
+        "matched_functions": [
+          "cJSON_Minify"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function cJSON_Minify (cJSON.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ",
+            "expected": "CRASH:heap-buffer-overflow|cJSON.c|cJSON_Minify|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 1,
+          "minimized_size": 1,
+          "iterations": 0,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642",
+            "heap-buffer-overflow|cJSON.c|cJSON_Minify|READ|L2642"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/reg_crash_string_8a331fdd",
+        "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/reg_crash_string_8a331fdd/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "valid_simple",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    },
+    {
+      "test_id": "valid_string_space",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout '{\"fullname\":\"JohnDoe\"}' != expected '{\"full name\":\"John Doe\"}'"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout '{\"fullname\":\"JohnDoe\"}' != expected '{\"full name\":\"John Doe\"}'"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: stdout '{\"fullname\":\"JohnDoe\"}' != expected '{\"full name\":\"John Doe\"}'"
+    },
+    {
+      "test_id": "valid_nested",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    },
+    {
+      "test_id": "boundary_empty",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    }
+  ],
+  "executions": [
+    {
+      "test_id": "valid_simple",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0098,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_simple.json",
+      "input_sha256": "912857f53860052d9e5b0bc8c1f5920fa2e66f8966c24b1d6d9bd3edefd9aa6d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{\"a\":1,\"b\":[1,2,3]}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_simple/base-release.stdout",
+      "stderr_file": "logs/valid_simple/base-release.stderr"
+    },
+    {
+      "test_id": "valid_simple",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_simple.json",
+      "input_sha256": "912857f53860052d9e5b0bc8c1f5920fa2e66f8966c24b1d6d9bd3edefd9aa6d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{\"a\":1,\"b\":[1,2,3]}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_simple/base-sanitized.stdout",
+      "stderr_file": "logs/valid_simple/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_simple",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_simple.json",
+      "input_sha256": "912857f53860052d9e5b0bc8c1f5920fa2e66f8966c24b1d6d9bd3edefd9aa6d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{\"a\":1,\"b\":[1,2,3]}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_simple/patched-release.stdout",
+      "stderr_file": "logs/valid_simple/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_simple",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_simple.json",
+      "input_sha256": "912857f53860052d9e5b0bc8c1f5920fa2e66f8966c24b1d6d9bd3edefd9aa6d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{\"a\":1,\"b\":[1,2,3]}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_simple/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_simple/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_string_space",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_string_space.json",
+      "input_sha256": "38f154b9d2ff0a8ae5d2de86ff69757308865508df2f67f8f2ae655f70cdfd50",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{\"full name\":\"John Doe\"}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_string_space/base-release.stdout",
+      "stderr_file": "logs/valid_string_space/base-release.stderr"
+    },
+    {
+      "test_id": "valid_string_space",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_string_space.json",
+      "input_sha256": "38f154b9d2ff0a8ae5d2de86ff69757308865508df2f67f8f2ae655f70cdfd50",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{\"full name\":\"John Doe\"}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_string_space/base-sanitized.stdout",
+      "stderr_file": "logs/valid_string_space/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_string_space",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0051,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_string_space.json",
+      "input_sha256": "38f154b9d2ff0a8ae5d2de86ff69757308865508df2f67f8f2ae655f70cdfd50",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{\"fullname\":\"JohnDoe\"}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_string_space/patched-release.stdout",
+      "stderr_file": "logs/valid_string_space/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_string_space",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_string_space.json",
+      "input_sha256": "38f154b9d2ff0a8ae5d2de86ff69757308865508df2f67f8f2ae655f70cdfd50",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{\"fullname\":\"JohnDoe\"}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_string_space/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_string_space/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_nested",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.005,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_nested.json",
+      "input_sha256": "0ae069344b19d761a83036a5c453dd9b92d9159f5c4610481b64f96853878898",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "[{\"x\":1},{\"y\":2}]",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_nested/base-release.stdout",
+      "stderr_file": "logs/valid_nested/base-release.stderr"
+    },
+    {
+      "test_id": "valid_nested",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_nested.json",
+      "input_sha256": "0ae069344b19d761a83036a5c453dd9b92d9159f5c4610481b64f96853878898",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "[{\"x\":1},{\"y\":2}]",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_nested/base-sanitized.stdout",
+      "stderr_file": "logs/valid_nested/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_nested",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_nested.json",
+      "input_sha256": "0ae069344b19d761a83036a5c453dd9b92d9159f5c4610481b64f96853878898",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "[{\"x\":1},{\"y\":2}]",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_nested/patched-release.stdout",
+      "stderr_file": "logs/valid_nested/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_nested",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_nested.json",
+      "input_sha256": "0ae069344b19d761a83036a5c453dd9b92d9159f5c4610481b64f96853878898",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "[{\"x\":1},{\"y\":2}]",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_nested/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_nested/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- boundary_empty.json",
+      "input_sha256": "257c1be96ae69f4b01c2c69bdb6d78605f59175819fb007d0bf245bf48444c4a",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/base-release.stdout",
+      "stderr_file": "logs/boundary_empty/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0096,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_empty.json",
+      "input_sha256": "257c1be96ae69f4b01c2c69bdb6d78605f59175819fb007d0bf245bf48444c4a",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_empty/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- boundary_empty.json",
+      "input_sha256": "257c1be96ae69f4b01c2c69bdb6d78605f59175819fb007d0bf245bf48444c4a",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "{}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/patched-release.stdout",
+      "stderr_file": "logs/boundary_empty/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_empty.json",
+      "input_sha256": "257c1be96ae69f4b01c2c69bdb6d78605f59175819fb007d0bf245bf48444c4a",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "{}",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_empty/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_comment",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_comment.json",
+      "input_sha256": "766e0153d3f7ec95c97e755b1ea7b1681566923b9299365fdc8399443ca20c1d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_comment/base-release.stdout",
+      "stderr_file": "logs/crash_comment/base-release.stderr"
+    },
+    {
+      "test_id": "crash_comment",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1161,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_comment.json",
+      "input_sha256": "766e0153d3f7ec95c97e755b1ea7b1681566923b9299365fdc8399443ca20c1d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000014 at pc 0x559272b63b63 bp 0x7ffd1634f720 sp 0x7ffd1634f710\nREAD of size 1 at 0x502000000014 thread T0\n    #0 0x559272b63b62 in cJSON_Minify /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642\n    #1 0x559272b649e1 in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:20\n    #2 0x7f7e29c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f7e29c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x559272b5a484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\n0x502000000014 is located 1 bytes after 3-byte region [0x502000000010,0x502000000013)\nallocated by thread T0 here:\n    #0 0x7f7e2a8fd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69\n    #1 0x559272b649bf in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:15\n    #2 0x7f7e29c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f7e29c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x559272b5a484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642 in cJSON_Minify\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa[03]fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_comment/base-sanitized.stdout",
+      "stderr_file": "logs/crash_comment/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_comment",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0098,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_comment.json",
+      "input_sha256": "766e0153d3f7ec95c97e755b1ea7b1681566923b9299365fdc8399443ca20c1d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "/*",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_comment/patched-release.stdout",
+      "stderr_file": "logs/crash_comment/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_comment",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_comment.json",
+      "input_sha256": "766e0153d3f7ec95c97e755b1ea7b1681566923b9299365fdc8399443ca20c1d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "/*",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_comment/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_comment/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_string",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0093,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_string.json",
+      "input_sha256": "aa885fb27a812abedb8978a3bb3218cbb01a22d270469b74f23995140175c462",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "\"abc",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_string/base-release.stdout",
+      "stderr_file": "logs/crash_string/base-release.stderr"
+    },
+    {
+      "test_id": "crash_string",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1158,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_string.json",
+      "input_sha256": "aa885fb27a812abedb8978a3bb3218cbb01a22d270469b74f23995140175c462",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000015 at pc 0x55e5b4344b63 bp 0x7fffc7ef49b0 sp 0x7fffc7ef49a0\nREAD of size 1 at 0x502000000015 thread T0\n    #0 0x55e5b4344b62 in cJSON_Minify /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642\n    #1 0x55e5b43459e1 in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:20\n    #2 0x7fdb2482a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fdb2482a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55e5b433b484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\n0x502000000015 is located 0 bytes after 5-byte region [0x502000000010,0x502000000015)\nallocated by thread T0 here:\n    #0 0x7fdb254fd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69\n    #1 0x55e5b43459bf in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:15\n    #2 0x7fdb2482a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7fdb2482a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55e5b433b484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642 in cJSON_Minify\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa[05]fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_string/base-sanitized.stdout",
+      "stderr_file": "logs/crash_string/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_string",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0097,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_string.json",
+      "input_sha256": "aa885fb27a812abedb8978a3bb3218cbb01a22d270469b74f23995140175c462",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "\"abc",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_string/patched-release.stdout",
+      "stderr_file": "logs/crash_string/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_string",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_string.json",
+      "input_sha256": "aa885fb27a812abedb8978a3bb3218cbb01a22d270469b74f23995140175c462",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "\"abc",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_string/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_string/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_string_8a331fdd",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "be86303e5f690f6b25ff291b59752b0e01ebaec83fe25a3ff5626a8d7a67661d",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_string_8a331fdd.bin",
+      "input_sha256": "8a331fdde7032f33a71e1b2e257d80166e348e00fcb17914f48bdb57a1c63007",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "\"",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_string_8a331fdd/base-release.stdout",
+      "stderr_file": "logs/reg_crash_string_8a331fdd/base-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_string_8a331fdd",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "cc4659090652b54290f1e4570c4a21f1d0631ecd69358b908e791db6a4327e61",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1162,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_string_8a331fdd.bin",
+      "input_sha256": "8a331fdde7032f33a71e1b2e257d80166e348e00fcb17914f48bdb57a1c63007",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000012 at pc 0x556cefd81b63 bp 0x7ffcc78c7940 sp 0x7ffcc78c7930\nREAD of size 1 at 0x502000000012 thread T0\n    #0 0x556cefd81b62 in cJSON_Minify /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642\n    #1 0x556cefd829e1 in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:20\n    #2 0x7f309d22a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f309d22a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x556cefd78484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\n0x502000000012 is located 0 bytes after 2-byte region [0x502000000010,0x502000000012)\nallocated by thread T0 here:\n    #0 0x7f309defd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69\n    #1 0x556cefd829bf in main /home/claude/patchval_project/targets/cjson_minify/base/harness.c:15\n    #2 0x7f309d22a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f309d22a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x556cefd78484 in _start (/tmp/runall2/cjson_minify_regression/base/sanitized/target.bin+0xf484) (BuildId: ee499d7dac64759ac74f79fb4fd1cc365a5be2c3)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c:2642 in cJSON_Minify\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa[02]fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|cJSON_Minify@cJSON.c:2642|READ",
+        "top_frames": [
+          {
+            "function": "cJSON_Minify",
+            "file": "cJSON.c",
+            "line": 2642
+          },
+          {
+            "function": "main",
+            "file": "harness.c",
+            "line": 20
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/reg_crash_string_8a331fdd/base-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_string_8a331fdd/base-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_string_8a331fdd",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "30fb51b7b7eac5374a2fc42f2af09f330d73dd06789862bab1b9623e21d50a6a",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0097,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_string_8a331fdd.bin",
+      "input_sha256": "8a331fdde7032f33a71e1b2e257d80166e348e00fcb17914f48bdb57a1c63007",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "\"",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_string_8a331fdd/patched-release.stdout",
+      "stderr_file": "logs/reg_crash_string_8a331fdd/patched-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_string_8a331fdd",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "578f1ead9a33aedc0c0b8688ea86b1695364857a67679811662b743b961146bf",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0095,
+      "command": [
+        "/tmp/runall2/cjson_minify_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_string_8a331fdd.bin",
+      "input_sha256": "8a331fdde7032f33a71e1b2e257d80166e348e00fcb17914f48bdb57a1c63007",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=1024",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "\"",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_string_8a331fdd/patched-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_string_8a331fdd/patched-sanitized.stderr"
+    }
+  ],
+  "hardening": {
+    "base": {
+      "binary": "/tmp/runall2/cjson_minify_regression/base/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "patched": {
+      "binary": "/tmp/runall2/cjson_minify_regression/patched/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "changes": [],
+    "protection_regressed": false
+  },
+  "reproducers": [
+    {
+      "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_comment",
+      "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_comment/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_string",
+      "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_string/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/reg_crash_string_8a331fdd",
+      "manifest": "/tmp/runall2/cjson_minify_regression/artifacts/reproducers/reg_crash_string_8a331fdd/manifest.json",
+      "replay_input": "input.min.bin"
+    }
+  ],
+  "regression": {
+    "loaded_from_suite": [
+      "reg_crash_string_8a331fdd"
+    ],
+    "added_to_suite": []
+  },
+  "errors": []
+}

@@ -1,0 +1,22 @@
+# vulnstr: rejects long values with exit(2); exit 2 is not documented as graceful -> expected 40; with graceful_exit_codes [0, 2] -> expected 0
+--- a/vulnstr.c
++++ b/vulnstr.c
+@@ -16,6 +16,7 @@
+  * test is a detected crash.
+  */
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ static void store_value(char *val, const char *value)
+@@ -38,6 +39,10 @@
+     const char *value = eq + 1;
+ 
+     char val[32];
++    if (strlen(value) >= sizeof val) {
++        fprintf(stderr, "vulnstr: value too long\n");
++        exit(2);
++    }
+     store_value(val, value);
+     printf("%s:%d\n", key, (int)strlen(val));
+ }

@@ -1,0 +1,145 @@
+{
+  "bundle_format": 2,
+  "created_utc": "2026-11-17T23:55:53+00:00",
+  "target": "csvsum-incomplete",
+  "test_id": "crash_narrow",
+  "finding_status": "INCOMPLETE_FIX",
+  "build_mode": "sanitized",
+  "source": {
+    "base": {
+      "path": "/home/claude/patchval_project/targets/csvsum/base",
+      "tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+      "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+      "git_dirty": false,
+      "git_tree": "9afdcdc34dfb54fbc487bfa99a383369d5b1e901"
+    },
+    "patched": {
+      "path": "/home/claude/patchval_project/targets/csvsum/incomplete",
+      "tree_sha256": "1733721e099fa873eca9f30d0cc636890f4675a1ff527ca8ae2fc92bcaec3496",
+      "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+      "git_dirty": false,
+      "git_tree": "7c5ff7ec95fb16655a316de03991fe9d64576612"
+    }
+  },
+  "binary": {
+    "base_sha256": "ddda9657df8d3e63284e2a1dc97b0ac61dea550deb132ce820d99c6652afc3b1",
+    "patched_sha256": "b943cc9a8422cbeed494d96fe7eca78c42ce73e39618759c7cdeff3682a92426",
+    "runtime_libs_ldd": [
+      "linux-vdso.so.1 (0x00007f277bca6000)",
+      "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f277b400000)",
+      "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f277ac00000)",
+      "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f277a800000)",
+      "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f277bba0000)",
+      "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f277bb72000)",
+      "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f277a400000)",
+      "/lib64/ld-linux-x86-64.so.2 (0x00007f277bca8000)"
+    ],
+    "bundled_libs": [
+      "libasan.so.8",
+      "libubsan.so.1",
+      "libgcc_s.so.1",
+      "libstdc++.so.6"
+    ]
+  },
+  "build": {
+    "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/csvsum/base/csvsum.c -o /tmp/runall2/csvsum_incomplete/base/sanitized/target.bin",
+    "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+    "template": "gcc {cflags} {src}/csvsum.c -o {out}"
+  },
+  "run": {
+    "input_mode": "stdin",
+    "argv_split": "single",
+    "argv_template": [],
+    "command": [
+      "/tmp/runall2/csvsum_incomplete/base/sanitized/target.bin"
+    ],
+    "env": {
+      "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+      "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+    },
+    "timeout_sec": 10.0,
+    "input_used_by_replay": "input.min.bin"
+  },
+  "inputs": {
+    "original": {
+      "file": "input.orig.bin",
+      "sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "size": 32
+    },
+    "minimized": {
+      "file": "input.min.bin",
+      "sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "size": 5,
+      "stable": true,
+      "iterations": 35,
+      "preserved_signature": "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+      "replays": [
+        "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+        "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+        "heap-buffer-overflow|csvsum.c|accumulate|READ|L26"
+      ]
+    }
+  },
+  "expected": {
+    "crash": {
+      "state": "crash",
+      "is_crash": true,
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "access": "READ",
+      "termination": {
+        "signal": "SIGABRT",
+        "exit_code": null,
+        "timed_out": false,
+        "resource_limited": false
+      },
+      "unclassified_reason": null,
+      "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+      "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+      "top_frames": [
+        {
+          "function": "accumulate",
+          "file": "csvsum.c",
+          "line": 26
+        },
+        {
+          "function": "process_row",
+          "file": "csvsum.c",
+          "line": 47
+        },
+        {
+          "function": "main",
+          "file": "csvsum.c",
+          "line": 84
+        },
+        {
+          "function": "__libc_start_call_main",
+          "file": "../sysdeps/nptl/libc_start_call_main.h",
+          "line": 58
+        },
+        {
+          "function": "__libc_start_main_impl",
+          "file": "../csu/libc-start.c",
+          "line": 360
+        },
+        {
+          "function": "_start",
+          "file": null,
+          "line": null
+        }
+      ]
+    },
+    "stderr_must_contain": [
+      "AddressSanitizer: heap-buffer-overflow",
+      "accumulate"
+    ]
+  },
+  "replays_during_analysis": [
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+    "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+  ]
+}

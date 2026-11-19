@@ -1,0 +1,131 @@
+{
+  "tool": "patchval",
+  "tool_version": "2.0.0",
+  "target": "cjson_minify-correct+cjson_build_break",
+  "verdict": {
+    "exit_code": 30,
+    "label": "BUILD_OR_CONFIG_ERROR",
+    "analysis_complete": false
+  },
+  "scope_note": "Verdicts are limited to the documented test suite; absence of an error in these tests is not proof that no vulnerability exists.",
+  "isolation": {
+    "backend": "bwrap",
+    "level": "full",
+    "reason": "",
+    "network": "disabled",
+    "filesystem": "read-only system + private scratch",
+    "pid_namespace": true
+  },
+  "checks": {
+    "minimization": "enabled",
+    "replays_per_finding": 3
+  },
+  "builds": {
+    "base/release": {
+      "version": "base",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/cjson_build_break-config.correct/base/release/target.bin",
+      "binary_sha256": "8656f4e9a6955292705eda478efc4f9cf52450600b658be1e6a61fa440aee680",
+      "command": "gcc -O2 -g -I/home/claude/patchval_project/targets/cjson_minify/base /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c /home/claude/patchval_project/targets/cjson_minify/base/harness.c -o /tmp/unseen2/cjson_build_break-config.correct/base/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/base",
+        "tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "f985467a6d17f0cc976f25da3c25dc291219687a"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007efeaafc3000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007efeaac00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007efeaafc5000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "base/sanitized": {
+      "version": "base",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/unseen2/cjson_build_break-config.correct/base/sanitized/target.bin",
+      "binary_sha256": "9c4a0acd5c76df6df018383534be7b9997f5caaf008917b5450abe6cfd88f029",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -I/home/claude/patchval_project/targets/cjson_minify/base /home/claude/patchval_project/targets/cjson_minify/base/cJSON.c /home/claude/patchval_project/targets/cjson_minify/base/harness.c -o /tmp/unseen2/cjson_build_break-config.correct/base/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/cjson_minify/base",
+        "tree_sha256": "4be813902ce738af080a56efb4926654de0ea857602451ed2c67f6c2550ece79",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "f985467a6d17f0cc976f25da3c25dc291219687a"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f45719e7000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f4571000000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f4570800000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4570400000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f45717b9000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f457178b000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f4570000000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f45719e9000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/release": {
+      "version": "patched",
+      "mode": "release",
+      "ok": false,
+      "binary_path": null,
+      "binary_sha256": null,
+      "command": "gcc -O2 -g -I/tmp/unseen2/cjson_build_break-config.correct/patched_src /tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c /tmp/unseen2/cjson_build_break-config.correct/patched_src/harness.c -o /tmp/unseen2/cjson_build_break-config.correct/patched/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 1,
+      "source": {
+        "path": "/tmp/unseen2/cjson_build_break-config.correct/patched_src",
+        "tree_sha256": "fb1c2ba4ea56bf99d3bd75d070eb29f9990e5cfd467f1c8a6e045a572e18e6f6",
+        "git_commit": null,
+        "git_dirty": null,
+        "git_tree": null
+      },
+      "runtime_libs": [],
+      "sandbox": "bwrap",
+      "stderr_tail": "/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c: In function 'cJSON_Minify':\n/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c:2635:5: warning: implicit declaration of function 'this_symbol_does_not_exist' [-Wimplicit-function-declaration]\n 2635 |     this_symbol_does_not_exist(json);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~\n/usr/bin/ld: /tmp/cc3ibQyk.o: in function `cJSON_Minify':\n/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c:2635:(.text+0x32bb): undefined reference to `this_symbol_does_not_exist'\ncollect2: error: ld returned 1 exit status\n"
+    },
+    "patched/sanitized": {
+      "version": "patched",
+      "mode": "sanitized",
+      "ok": false,
+      "binary_path": null,
+      "binary_sha256": null,
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -I/tmp/unseen2/cjson_build_break-config.correct/patched_src /tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c /tmp/unseen2/cjson_build_break-config.correct/patched_src/harness.c -o /tmp/unseen2/cjson_build_break-config.correct/patched/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 1,
+      "source": {
+        "path": "/tmp/unseen2/cjson_build_break-config.correct/patched_src",
+        "tree_sha256": "fb1c2ba4ea56bf99d3bd75d070eb29f9990e5cfd467f1c8a6e045a572e18e6f6",
+        "git_commit": null,
+        "git_dirty": null,
+        "git_tree": null
+      },
+      "runtime_libs": [],
+      "sandbox": "bwrap",
+      "stderr_tail": "/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c: In function 'cJSON_Minify':\n/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c:2635:5: warning: implicit declaration of function 'this_symbol_does_not_exist' [-Wimplicit-function-declaration]\n 2635 |     this_symbol_does_not_exist(json);\n      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~\n/usr/bin/ld: /tmp/cc9cNlYI.o: in function `cJSON_Minify':\n/tmp/unseen2/cjson_build_break-config.correct/patched_src/cJSON.c:2635:(.text+0x8ec2): undefined reference to `this_symbol_does_not_exist'\ncollect2: error: ld returned 1 exit status\n"
+    }
+  },
+  "diff": {},
+  "findings": [],
+  "executions": [],
+  "hardening": {},
+  "reproducers": [],
+  "regression": {
+    "loaded_from_suite": [],
+    "added_to_suite": []
+  },
+  "errors": [
+    "build failed: patched/release",
+    "build failed: patched/sanitized"
+  ]
+}

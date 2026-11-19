@@ -1,0 +1,15 @@
+# csvsum: different correct fix (reject over-wide rows) -> expected 0
+--- a/csvsum.c
++++ b/csvsum.c
+@@ -39,7 +39,10 @@
+ 
+ static void process_row(double *sums, int ncols, char *line)
+ {
+-    (void)ncols;
++    if (count_fields(line) > ncols) {
++        fprintf(stderr, "csvsum: skipping row with too many fields\n");
++        return;
++    }
+     int i = 0;
+     char *save = NULL;
+     for (char *tok = strtok_r(line, ",", &save); tok != NULL;

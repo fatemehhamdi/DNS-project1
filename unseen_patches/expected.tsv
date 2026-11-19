@@ -1,0 +1,7 @@
+# config                                         patch file                         extra args                expected
+targets/csvsum/config.correct.yaml               csvsum_alt_fix_skip_row.diff       -                         0
+targets/csvsum/config.correct.yaml               csvsum_new_issue_oob_read.diff     -                         10
+targets/vulnstr/config.correct.yaml              vulnstr_hang_on_long.diff          -                         40
+targets/vulnstr/config.correct.yaml              vulnstr_reject_exit2.diff          -                         40
+targets/vulnstr/config.graceful2.yaml            vulnstr_reject_exit2.diff          -                         0
+targets/cjson_minify/config.correct.yaml         cjson_build_break.diff             -                         30

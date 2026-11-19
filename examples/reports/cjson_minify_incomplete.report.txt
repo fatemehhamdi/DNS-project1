@@ -1,0 +1,55 @@
+============================================================================
+  patchval 2.0.0 :: cjson_minify-incomplete
+============================================================================
+VERDICT: exit 10 (VULN_OR_SECURITY)
+Isolation: bwrap [full] network=disabled
+Checks: minimization enabled, 3 replays per finding
+
+Builds:
+  base/release       ok     bin=eb0b90702db4  src=4be813902ce7  commit=1acee5a274
+  base/sanitized     ok     bin=86ed9109f64b  src=4be813902ce7  commit=1acee5a274
+  patched/release    ok     bin=6ab46dedee45  src=6dbbc664eb37  commit=1acee5a274
+  patched/sanitized  ok     bin=7298655c6df5  src=6dbbc664eb37  commit=1acee5a274
+
+Security findings:
+  [FIXED] crash_comment  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 2 -> 2 bytes (stable)
+      patch link: strong (crash_site_function, base) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/cjson_minify_incomplete/artifacts/reproducers/crash_comment
+  [INCOMPLETE_FIX] crash_string  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CRASH        -> VULN_REMAINS
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 4 -> 1 bytes (stable)
+      patch link: strong (crash_site_function, patched) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch -- yet the crash still occurs on the patched version, so the change does not cover this input path
+      note: one input exposing this vulnerability is blocked, but the same vulnerability (same type/file/function) is still reachable via this input
+      bundle: /tmp/runall2/cjson_minify_incomplete/artifacts/reproducers/crash_string
+  [INCOMPLETE_FIX] reg_crash_string_8a331fdd  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CRASH        -> VULN_REMAINS
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 1 -> 1 bytes (stable)
+      patch link: strong (crash_site_function, patched) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch -- yet the crash still occurs on the patched version, so the change does not cover this input path
+      note: one input exposing this vulnerability is blocked, but the same vulnerability (same type/file/function) is still reachable via this input
+      bundle: /tmp/runall2/cjson_minify_incomplete/artifacts/reproducers/reg_crash_string_8a331fdd
+
+Functional findings (independent oracle):
+  [FUNC_OK] valid_simple
+  [FUNC_OK] valid_string_space
+  [FUNC_OK] valid_nested
+  [FUNC_OK] boundary_empty
+
+Binary hardening (patched release build):
+  NX=True PIE=True RELRO=full StackCanary=True
+
+Regression suite: 1 test(s) loaded from earlier runs, 0 recorded by this run.
+
+Scope: results hold for the documented test suite only.
+Exit codes: 0=PASS 10=VULN/NEW_ISSUE 20=FUNC_REGRESSION 30=BUILD/CONFIG 40=INCONCLUSIVE

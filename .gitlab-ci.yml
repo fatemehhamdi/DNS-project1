@@ -1,0 +1,39 @@
+# patchval CI (GitLab). Active automatically at the repository root.
+# The job exit status is the tool's verdict: 10/20/30/40 fail the job
+# (40 = inconclusive is NOT allowed to pass silently).
+stages: [self-test, scenarios]
+
+default:
+  image: ubuntu:24.04
+  before_script:
+    - apt-get update -qq
+    - DEBIAN_FRONTEND=noninteractive apt-get install -y -qq gcc clang python3 python3-yaml python3-pytest bubblewrap binutils patch
+    # Isolation is MANDATORY (patchval exits 30 without it). Fail early and loudly if the
+    # runner cannot create namespaces; use a runner with user namespaces or Docker executor.
+    - bwrap --unshare-all --ro-bind /usr /usr --symlink usr/lib /lib --symlink usr/lib64 /lib64 --symlink usr/bin /bin --proc /proc --dev /dev true
+
+unit-and-integration:
+  stage: self-test
+  script:
+    - python3 -m pytest tests -q
+
+all-scenarios:
+  stage: scenarios
+  script:
+    - OUT_ROOT="$CI_PROJECT_DIR/runs" REPORTS=reports ./run_all.sh
+    - OUT_ROOT="$CI_PROJECT_DIR/unseen" ./run_unseen.sh
+  artifacts:
+    when: always
+    paths: [reports/, runs/]
+    expire_in: 1 week
+
+# Validate a patch under review: set PV_CONFIG and PV_PATCH as CI variables.
+validate-patch:
+  stage: scenarios
+  rules:
+    - if: '$PV_CONFIG'
+  script:
+    - python3 -m patchval -c "$PV_CONFIG" ${PV_PATCH:+--patch "$PV_PATCH"} --json verdict.json --work pvwork
+  artifacts:
+    when: always
+    paths: [verdict.json, pvwork/artifacts/]

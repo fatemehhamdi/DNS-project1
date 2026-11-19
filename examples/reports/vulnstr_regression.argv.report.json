@@ -1,0 +1,2190 @@
+{
+  "tool": "patchval",
+  "tool_version": "2.0.0",
+  "target": "vulnstr-regression-argv",
+  "verdict": {
+    "exit_code": 20,
+    "label": "FUNC_REGRESSION",
+    "analysis_complete": true
+  },
+  "scope_note": "Verdicts are limited to the documented test suite; absence of an error in these tests is not proof that no vulnerability exists.",
+  "isolation": {
+    "backend": "bwrap",
+    "level": "full",
+    "reason": "",
+    "network": "disabled",
+    "filesystem": "read-only system + private scratch",
+    "pid_namespace": true
+  },
+  "checks": {
+    "minimization": "enabled",
+    "replays_per_finding": 3
+  },
+  "builds": {
+    "base/release": {
+      "version": "base",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "command": "gcc -O2 -g /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c -o /tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/vulnstr/base",
+        "tree_sha256": "99169265e77f9f370bf6c33fc4221aca3cc15bcc63b4732c24f88b030d243d4a",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "d2d4ab9d6a2c8435b2f7b31dbc6636ff07e5852f"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fcc3d2c6000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fcc3d000000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fcc3d2c8000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "base/sanitized": {
+      "version": "base",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c -o /tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/vulnstr/base",
+        "tree_sha256": "99169265e77f9f370bf6c33fc4221aca3cc15bcc63b4732c24f88b030d243d4a",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "d2d4ab9d6a2c8435b2f7b31dbc6636ff07e5852f"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fa152021000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007fa151800000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007fa151000000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa150c00000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa151f1b000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fa151eed000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fa150800000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fa152023000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/release": {
+      "version": "patched",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "command": "gcc -O2 -g /home/claude/patchval_project/targets/vulnstr/regression/vulnstr.c -o /tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/vulnstr/regression",
+        "tree_sha256": "90d5eecaa6491c4a16941c6a1b389d9c093bf6efd337c14b7dc6dbb0c59dc7e7",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "0fab6516956be4a4fe7861c4553c6a227a054c7d"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fdc3fa24000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fdc3f600000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fdc3fa26000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/sanitized": {
+      "version": "patched",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/vulnstr/regression/vulnstr.c -o /tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/vulnstr/regression",
+        "tree_sha256": "90d5eecaa6491c4a16941c6a1b389d9c093bf6efd337c14b7dc6dbb0c59dc7e7",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "0fab6516956be4a4fe7861c4553c6a227a054c7d"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f380c38e000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f380bc00000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f380b400000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f380b000000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f380bb17000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f380c343000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f380ac00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f380c390000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    }
+  },
+  "diff": {
+    "source": "tree",
+    "files": [
+      {
+        "path": "vulnstr.c",
+        "status": "modified",
+        "base_changed_lines": 0,
+        "patched_changed_lines": 2,
+        "changed_functions": [
+          "store_value"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "test_id": "crash_name",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "stack-smashing",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "buffer-overflow",
+      "detection": "sanitizer_ubsan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "vulnstr.c"
+        ],
+        "matched_functions": [
+          "store_value"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function store_value (vulnstr.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 206,
+          "minimized_size": 34,
+          "iterations": 154,
+          "stable": true,
+          "replays": [
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_name",
+        "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_name/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7f8624000040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "crash_data",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "stack-smashing",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "buffer-overflow",
+      "detection": "sanitizer_ubsan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "vulnstr.c"
+        ],
+        "matched_functions": [
+          "store_value"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function store_value (vulnstr.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 206,
+          "minimized_size": 34,
+          "iterations": 154,
+          "stable": true,
+          "replays": [
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_data",
+        "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_data/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7ff85ee00040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "reg_crash_name_97de6943",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "buffer-overflow",
+      "detection": "sanitizer_ubsan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "crash_site_function",
+        "side": "base",
+        "matched_files": [
+          "vulnstr.c"
+        ],
+        "matched_functions": [
+          "store_value"
+        ],
+        "matched_lines": [],
+        "explanation": "the faulting function store_value (vulnstr.c) was modified by the patch"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE",
+            "expected": "CRASH:buffer-overflow|vulnstr.c|store_value|WRITE"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 34,
+          "minimized_size": 34,
+          "iterations": 101,
+          "stable": true,
+          "replays": [
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25",
+            "buffer-overflow|vulnstr.c|store_value|WRITE|L25"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/reg_crash_name_97de6943",
+        "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/reg_crash_name_97de6943/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7f58df800040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "valid_name",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    },
+    {
+      "test_id": "valid_city",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout missing 'city:9'"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout missing 'city:9'"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: stdout missing 'city:9'"
+    },
+    {
+      "test_id": "boundary_empty",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    },
+    {
+      "test_id": "invalid_noeq",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    }
+  ],
+  "executions": [
+    {
+      "test_id": "valid_name",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0048,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "name=bob"
+      ],
+      "input": "argv <- valid_name.txt",
+      "input_sha256": "91c92fad95e3e7c9a4012b88ab2c82aafab8b55550c899ea9fbc7d842aedd502",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "name:3\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_name/base-release.stdout",
+      "stderr_file": "logs/valid_name/base-release.stderr"
+    },
+    {
+      "test_id": "valid_name",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0087,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "name=bob"
+      ],
+      "input": "argv <- valid_name.txt",
+      "input_sha256": "91c92fad95e3e7c9a4012b88ab2c82aafab8b55550c899ea9fbc7d842aedd502",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "name:3\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_name/base-sanitized.stdout",
+      "stderr_file": "logs/valid_name/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_name",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0044,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "name=bob"
+      ],
+      "input": "argv <- valid_name.txt",
+      "input_sha256": "91c92fad95e3e7c9a4012b88ab2c82aafab8b55550c899ea9fbc7d842aedd502",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "name:3\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_name/patched-release.stdout",
+      "stderr_file": "logs/valid_name/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_name",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0086,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "name=bob"
+      ],
+      "input": "argv <- valid_name.txt",
+      "input_sha256": "91c92fad95e3e7c9a4012b88ab2c82aafab8b55550c899ea9fbc7d842aedd502",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "name:3\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_name/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_name/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_city",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0045,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "city=amsterdam"
+      ],
+      "input": "argv <- valid_city.txt",
+      "input_sha256": "6ee68e58ff22bb52be62941e5c0fa78fb2cb42b84db752fd092c8558aab8035e",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "city:9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_city/base-release.stdout",
+      "stderr_file": "logs/valid_city/base-release.stderr"
+    },
+    {
+      "test_id": "valid_city",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0085,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "city=amsterdam"
+      ],
+      "input": "argv <- valid_city.txt",
+      "input_sha256": "6ee68e58ff22bb52be62941e5c0fa78fb2cb42b84db752fd092c8558aab8035e",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "city:9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_city/base-sanitized.stdout",
+      "stderr_file": "logs/valid_city/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_city",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0045,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "city=amsterdam"
+      ],
+      "input": "argv <- valid_city.txt",
+      "input_sha256": "6ee68e58ff22bb52be62941e5c0fa78fb2cb42b84db752fd092c8558aab8035e",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "city:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_city/patched-release.stdout",
+      "stderr_file": "logs/valid_city/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_city",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0086,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "city=amsterdam"
+      ],
+      "input": "argv <- valid_city.txt",
+      "input_sha256": "6ee68e58ff22bb52be62941e5c0fa78fb2cb42b84db752fd092c8558aab8035e",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "city:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_city/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_city/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0044,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "x="
+      ],
+      "input": "argv <- boundary_empty.txt",
+      "input_sha256": "805bda9d8d4629fc92949170fb4652c59fcbad12a4a01f829459e4b4012bebf6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x:0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/base-release.stdout",
+      "stderr_file": "logs/boundary_empty/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0086,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "x="
+      ],
+      "input": "argv <- boundary_empty.txt",
+      "input_sha256": "805bda9d8d4629fc92949170fb4652c59fcbad12a4a01f829459e4b4012bebf6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "x:0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_empty/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0045,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "x="
+      ],
+      "input": "argv <- boundary_empty.txt",
+      "input_sha256": "805bda9d8d4629fc92949170fb4652c59fcbad12a4a01f829459e4b4012bebf6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x:0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/patched-release.stdout",
+      "stderr_file": "logs/boundary_empty/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_empty",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0086,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "x="
+      ],
+      "input": "argv <- boundary_empty.txt",
+      "input_sha256": "805bda9d8d4629fc92949170fb4652c59fcbad12a4a01f829459e4b4012bebf6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "x:0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_empty/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_empty/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_noeq",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0045,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "hello world"
+      ],
+      "input": "argv <- invalid_noeq.txt",
+      "input_sha256": "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_noeq/base-release.stdout",
+      "stderr_file": "logs/invalid_noeq/base-release.stderr"
+    },
+    {
+      "test_id": "invalid_noeq",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0088,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "hello world"
+      ],
+      "input": "argv <- invalid_noeq.txt",
+      "input_sha256": "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_noeq/base-sanitized.stdout",
+      "stderr_file": "logs/invalid_noeq/base-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_noeq",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0088,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "hello world"
+      ],
+      "input": "argv <- invalid_noeq.txt",
+      "input_sha256": "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_noeq/patched-release.stdout",
+      "stderr_file": "logs/invalid_noeq/patched-release.stderr"
+    },
+    {
+      "test_id": "invalid_noeq",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "hello world"
+      ],
+      "input": "argv <- invalid_noeq.txt",
+      "input_sha256": "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_noeq/patched-sanitized.stdout",
+      "stderr_file": "logs/invalid_noeq/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_name",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0086,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "name=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_name.txt",
+      "input_sha256": "d662bc9b6bbc74e2e5a1f9a66a5168618a1880e985882d54341c461a5d6009bc",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "*** stack smashing detected ***: terminated\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "stack-smashing",
+        "detection": "stack_canary",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "stack smashing detected (__stack_chk_fail)",
+        "fingerprint": "stack-smashing",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_name/base-release.stdout",
+      "stderr_file": "logs/crash_name/base-release.stderr"
+    },
+    {
+      "test_id": "crash_name",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1151,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "name=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_name.txt",
+      "input_sha256": "d662bc9b6bbc74e2e5a1f9a66a5168618a1880e985882d54341c461a5d6009bc",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "/home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25:18: runtime error: store to address 0x7f8624000040 with insufficient space for an object of type 'char'\n0x7f8624000040: note: pointer points here\n 41 41 41 41  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00\n              ^ \n    #0 0x5631e38e2725 in store_value /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25\n    #1 0x5631e38e2725 in process_line /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:41\n    #2 0x5631e38e2eaa in main /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:77\n    #3 0x7f862642a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f862642a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x5631e38e23c4 in _start (/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin+0x23c4) (BuildId: 994c67f9671174481eb4955762a13274a94d0fcb)\n\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7f8624000040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_name/base-sanitized.stdout",
+      "stderr_file": "logs/crash_name/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_name",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "name=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_name.txt",
+      "input_sha256": "d662bc9b6bbc74e2e5a1f9a66a5168618a1880e985882d54341c461a5d6009bc",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "name:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_name/patched-release.stdout",
+      "stderr_file": "logs/crash_name/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_name",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "name=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_name.txt",
+      "input_sha256": "d662bc9b6bbc74e2e5a1f9a66a5168618a1880e985882d54341c461a5d6009bc",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "name:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_name/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_name/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_data",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0087,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "data=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_data.txt",
+      "input_sha256": "f9d7320891cd0492e835846a99ffdb4e9047a0ae1c2c36570da762cd61e54986",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "*** stack smashing detected ***: terminated\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "stack-smashing",
+        "detection": "stack_canary",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "stack smashing detected (__stack_chk_fail)",
+        "fingerprint": "stack-smashing",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_data/base-release.stdout",
+      "stderr_file": "logs/crash_data/base-release.stderr"
+    },
+    {
+      "test_id": "crash_data",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1153,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "data=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_data.txt",
+      "input_sha256": "f9d7320891cd0492e835846a99ffdb4e9047a0ae1c2c36570da762cd61e54986",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "/home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25:18: runtime error: store to address 0x7ff85ee00040 with insufficient space for an object of type 'char'\n0x7ff85ee00040: note: pointer points here\n 41 41 41 41  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00\n              ^ \n    #0 0x563daced0725 in store_value /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25\n    #1 0x563daced0725 in process_line /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:41\n    #2 0x563daced0eaa in main /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:77\n    #3 0x7ff86122a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7ff86122a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x563daced03c4 in _start (/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin+0x23c4) (BuildId: 994c67f9671174481eb4955762a13274a94d0fcb)\n\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7ff85ee00040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_data/base-sanitized.stdout",
+      "stderr_file": "logs/crash_data/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_data",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "data=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_data.txt",
+      "input_sha256": "f9d7320891cd0492e835846a99ffdb4e9047a0ae1c2c36570da762cd61e54986",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "data:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_data/patched-release.stdout",
+      "stderr_file": "logs/crash_data/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_data",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "data=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- crash_data.txt",
+      "input_sha256": "f9d7320891cd0492e835846a99ffdb4e9047a0ae1c2c36570da762cd61e54986",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "data:4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_data/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_data/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_name_97de6943",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "dee7f7435b01e5567e9cb3b3ffe1740a71a4ac26aa1fa84306cb2f8b51693369",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+        "=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- reg_crash_name_97de6943.bin",
+      "input_sha256": "97de694399399a6e458bbb0392d4417e8bb761490a7ca0356b1d29ac78abb564",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": ":33\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_name_97de6943/base-release.stdout",
+      "stderr_file": "logs/reg_crash_name_97de6943/base-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_name_97de6943",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "014dee529122b755bdc63bd4d4d960c454e0acdbbb169187800dc0f673007d50",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1153,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin",
+        "=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- reg_crash_name_97de6943.bin",
+      "input_sha256": "97de694399399a6e458bbb0392d4417e8bb761490a7ca0356b1d29ac78abb564",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "/home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25:18: runtime error: store to address 0x7f58df800040 with insufficient space for an object of type 'char'\n0x7f58df800040: note: pointer points here\n 41 41 41 41  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00\n              ^ \n    #0 0x55fb87671725 in store_value /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:25\n    #1 0x55fb87671725 in process_line /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:41\n    #2 0x55fb87671eaa in main /home/claude/patchval_project/targets/vulnstr/base/vulnstr.c:77\n    #3 0x7f58e1c2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f58e1c2a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x55fb876713c4 in _start (/tmp/runall2/vulnstr_regression.argv/base/sanitized/target.bin+0x23c4) (BuildId: 994c67f9671174481eb4955762a13274a94d0fcb)\n\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "buffer-overflow",
+        "detection": "sanitizer_ubsan",
+        "access": "WRITE",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "UndefinedBehaviorSanitizer: store to address 0x7f58df800040 with insufficient space for an object of type 'char'",
+        "fingerprint": "buffer-overflow|store_value@vulnstr.c:25|WRITE",
+        "top_frames": [
+          {
+            "function": "store_value",
+            "file": "vulnstr.c",
+            "line": 25
+          },
+          {
+            "function": "process_line",
+            "file": "vulnstr.c",
+            "line": 41
+          },
+          {
+            "function": "main",
+            "file": "vulnstr.c",
+            "line": 77
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/reg_crash_name_97de6943/base-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_name_97de6943/base-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_name_97de6943",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "73f90a2c0a27ce09082a4a43d7a43f0387d787ba40371f196b9d4b5b8438da5e",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+        "=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- reg_crash_name_97de6943.bin",
+      "input_sha256": "97de694399399a6e458bbb0392d4417e8bb761490a7ca0356b1d29ac78abb564",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": ":4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_name_97de6943/patched-release.stdout",
+      "stderr_file": "logs/reg_crash_name_97de6943/patched-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_name_97de6943",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "ed53717174c65ee69ce6a234b2ca2c88e2a852e4f609d679cbab72f0b0ec4bba",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0087,
+      "command": [
+        "/tmp/runall2/vulnstr_regression.argv/patched/sanitized/target.bin",
+        "=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ],
+      "input": "argv <- reg_crash_name_97de6943.bin",
+      "input_sha256": "97de694399399a6e458bbb0392d4417e8bb761490a7ca0356b1d29ac78abb564",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": ":4\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_name_97de6943/patched-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_name_97de6943/patched-sanitized.stderr"
+    }
+  ],
+  "hardening": {
+    "base": {
+      "binary": "/tmp/runall2/vulnstr_regression.argv/base/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "patched": {
+      "binary": "/tmp/runall2/vulnstr_regression.argv/patched/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "changes": [],
+    "protection_regressed": false
+  },
+  "reproducers": [
+    {
+      "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_name",
+      "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_name/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_data",
+      "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/crash_data/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/reg_crash_name_97de6943",
+      "manifest": "/tmp/runall2/vulnstr_regression.argv/artifacts/reproducers/reg_crash_name_97de6943/manifest.json",
+      "replay_input": "input.min.bin"
+    }
+  ],
+  "regression": {
+    "loaded_from_suite": [
+      "reg_crash_name_97de6943"
+    ],
+    "added_to_suite": []
+  },
+  "errors": []
+}

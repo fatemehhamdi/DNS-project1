@@ -1,0 +1,96 @@
+# patchval CI (GitHub Actions). Active automatically at this path.
+#
+# Jobs:
+#   self-test        unit + integration tests of the tool itself
+#   scenarios        every delivered (target, patch) scenario must yield its
+#                    documented exit code (0/10/20), and every held-out patch
+#                    file its documented code (0/10/30/40)
+#   validate-patch   (manual) validate an arbitrary patch file against a
+#                    target; the job's status IS the verdict:
+#                    0 passes, 10/20/30/40 fail the job (40 = inconclusive
+#                    blocks: an unverifiable patch is not merged silently)
+name: patchval
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      config:
+        description: "target config, e.g. targets/csvsum/config.correct.yaml"
+        required: false
+        default: "targets/csvsum/config.correct.yaml"
+      patch:
+        description: "patch file to validate (relative to repo root); empty = config's patched tree"
+        required: false
+        default: ""
+
+jobs:
+  self-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain + sandbox
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc clang python3 python3-yaml python3-pytest bubblewrap binutils patch
+          # Ubuntu 24.04 restricts unprivileged user namespaces via AppArmor; bwrap needs them
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+          # isolation is mandatory: fail the job here (not silently later) if bwrap cannot run
+          bwrap --unshare-all --ro-bind /usr /usr --symlink usr/lib /lib --symlink usr/lib64 /lib64 --symlink usr/bin /bin --proc /proc --dev /dev true
+      - name: Unit tests
+        run: python3 -m pytest tests/test_unit.py -q
+      - name: Integration tests
+        run: python3 -m pytest tests/test_integration.py -q
+
+  scenarios:
+    runs-on: ubuntu-24.04
+    needs: self-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain + sandbox
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc clang python3 python3-yaml bubblewrap binutils patch
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+          # isolation is mandatory: fail the job here (not silently later) if bwrap cannot run
+          bwrap --unshare-all --ro-bind /usr /usr --symlink usr/lib /lib --symlink usr/lib64 /lib64 --symlink usr/bin /bin --proc /proc --dev /dev true
+      - name: All delivered scenarios
+        run: OUT_ROOT="$RUNNER_TEMP/runs" REPORTS=reports ./run_all.sh
+      - name: Held-out patch files
+        run: OUT_ROOT="$RUNNER_TEMP/unseen" ./run_unseen.sh
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: patchval-reports
+          path: |
+            reports/
+            ${{ runner.temp }}/runs/**/artifacts/reproducers/**
+
+  validate-patch:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain + sandbox
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc clang python3 python3-yaml bubblewrap binutils patch
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+          # isolation is mandatory: fail the job here (not silently later) if bwrap cannot run
+          bwrap --unshare-all --ro-bind /usr /usr --symlink usr/lib /lib --symlink usr/lib64 /lib64 --symlink usr/bin /bin --proc /proc --dev /dev true
+      - name: Validate
+        run: |
+          args=(-c "${{ github.event.inputs.config }}" --json verdict.json --require-isolation
+                --work "$RUNNER_TEMP/pv")
+          if [ -n "${{ github.event.inputs.patch }}" ]; then args+=(--patch "${{ github.event.inputs.patch }}"); fi
+          python3 -m patchval "${args[@]}"
+      - name: Upload verdict
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: patchval-verdict
+          path: |
+            verdict.json
+            ${{ runner.temp }}/pv/artifacts/**

@@ -1,0 +1,55 @@
+============================================================================
+  patchval 2.0.0 :: vulnstr-correct
+============================================================================
+VERDICT: exit 0 (PASS)
+Isolation: bwrap [full] network=disabled
+Checks: minimization enabled, 3 replays per finding
+
+Builds:
+  base/release       ok     bin=2d0586417e2b  src=99169265e77f  commit=1acee5a274+dirty
+  base/sanitized     ok     bin=efeadfb27616  src=99169265e77f  commit=1acee5a274+dirty
+  patched/release    ok     bin=99774f832866  src=da9f31afcace  commit=1acee5a274+dirty
+  patched/sanitized  ok     bin=bb90f9bd6d6a  src=da9f31afcace  commit=1acee5a274+dirty
+
+Security findings:
+  [FIXED] crash_name  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base CRASH        patched CLEAN        -> FIXED
+      replays : 6x stable
+      minimized: 206 -> 34 bytes (stable)
+      patch link: strong (crash_site_function, base) [store_value]
+        the faulting function store_value (vulnstr.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/vulnstr_correct/artifacts/reproducers/crash_name
+  [FIXED] crash_data  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base CRASH        patched CLEAN        -> FIXED
+      replays : 6x stable
+      minimized: 206 -> 34 bytes (stable)
+      patch link: strong (crash_site_function, base) [store_value]
+        the faulting function store_value (vulnstr.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/vulnstr_correct/artifacts/reproducers/crash_data
+  [FIXED] reg_crash_name_97de6943  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 34 -> 34 bytes (stable)
+      patch link: strong (crash_site_function, base) [store_value]
+        the faulting function store_value (vulnstr.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/vulnstr_correct/artifacts/reproducers/reg_crash_name_97de6943
+
+Functional findings (independent oracle):
+  [FUNC_OK] valid_name
+  [FUNC_OK] valid_city
+  [FUNC_OK] boundary_empty
+  [FUNC_OK] invalid_noeq
+
+Binary hardening (patched release build):
+  NX=True PIE=True RELRO=full StackCanary=True
+
+Regression suite: 1 test(s) loaded from earlier runs, 0 recorded by this run.
+
+Scope: results hold for the documented test suite only.
+Exit codes: 0=PASS 10=VULN/NEW_ISSUE 20=FUNC_REGRESSION 30=BUILD/CONFIG 40=INCONCLUSIVE

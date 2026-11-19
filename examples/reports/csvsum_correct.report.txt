@@ -1,0 +1,56 @@
+============================================================================
+  patchval 2.0.0 :: csvsum-correct
+============================================================================
+VERDICT: exit 0 (PASS)
+Isolation: bwrap [full] network=disabled
+Checks: minimization enabled, 3 replays per finding
+
+Builds:
+  base/release       ok     bin=6dce5e6dccc8  src=e5f985f3c2b6  commit=1acee5a274
+  base/sanitized     ok     bin=911ab1ec7493  src=e5f985f3c2b6  commit=1acee5a274
+  patched/release    ok     bin=706052752455  src=f6d1fb9774a0  commit=1acee5a274
+  patched/sanitized  ok     bin=db7b9499158b  src=f6d1fb9774a0  commit=1acee5a274
+
+Security findings:
+  [FIXED] crash_wide  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base CRASH        patched CLEAN        -> FIXED
+      replays : 6x stable
+      minimized: 140 -> 5 bytes (stable)
+      patch link: strong (caller_function, base) [process_row]
+        the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/csvsum_correct/artifacts/reproducers/crash_wide
+  [FIXED] crash_narrow  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base CRASH        patched CLEAN        -> FIXED
+      replays : 6x stable
+      minimized: 32 -> 5 bytes (stable)
+      patch link: strong (caller_function, base) [process_row]
+        the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/csvsum_correct/artifacts/reproducers/crash_narrow
+  [FIXED] reg_crash_wide_6f6babaf  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 5 -> 5 bytes (stable)
+      patch link: strong (caller_function, base) [process_row]
+        the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/csvsum_correct/artifacts/reproducers/reg_crash_wide_6f6babaf
+
+Functional findings (independent oracle):
+  [FUNC_OK] valid_basic
+  [FUNC_OK] valid_two
+  [FUNC_OK] boundary_header_only
+  [FUNC_OK] boundary_blank_line
+  [FUNC_OK] invalid_nonnumeric
+
+Binary hardening (patched release build):
+  NX=True PIE=True RELRO=full StackCanary=True
+
+Regression suite: 1 test(s) loaded from earlier runs, 0 recorded by this run.
+
+Scope: results hold for the documented test suite only.
+Exit codes: 0=PASS 10=VULN/NEW_ISSUE 20=FUNC_REGRESSION 30=BUILD/CONFIG 40=INCONCLUSIVE

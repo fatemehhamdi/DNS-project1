@@ -1,0 +1,11 @@
+# cJSON: patch that does not compile -> expected 30 (BUILD_OR_CONFIG_ERROR)
+--- a/cJSON.c
++++ b/cJSON.c
+@@ -2632,6 +2632,7 @@
+ 
+ CJSON_PUBLIC(void) cJSON_Minify(char *json)
+ {
++    this_symbol_does_not_exist(json);
+     unsigned char *into = (unsigned char*)json;
+ 
+     if (json == NULL)

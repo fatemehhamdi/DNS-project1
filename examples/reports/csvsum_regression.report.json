@@ -1,0 +1,2364 @@
+{
+  "tool": "patchval",
+  "tool_version": "2.0.0",
+  "target": "csvsum-regression",
+  "verdict": {
+    "exit_code": 20,
+    "label": "FUNC_REGRESSION",
+    "analysis_complete": true
+  },
+  "scope_note": "Verdicts are limited to the documented test suite; absence of an error in these tests is not proof that no vulnerability exists.",
+  "isolation": {
+    "backend": "bwrap",
+    "level": "full",
+    "reason": "",
+    "network": "disabled",
+    "filesystem": "read-only system + private scratch",
+    "pid_namespace": true
+  },
+  "checks": {
+    "minimization": "enabled",
+    "replays_per_finding": 3
+  },
+  "builds": {
+    "base/release": {
+      "version": "base",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/csvsum_regression/base/release/target.bin",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "command": "gcc -O2 -g /home/claude/patchval_project/targets/csvsum/base/csvsum.c -o /tmp/runall2/csvsum_regression/base/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/base",
+        "tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "9afdcdc34dfb54fbc487bfa99a383369d5b1e901"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007ff3770db000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff376e00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007ff3770dd000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "base/sanitized": {
+      "version": "base",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/csvsum_regression/base/sanitized/target.bin",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/csvsum/base/csvsum.c -o /tmp/runall2/csvsum_regression/base/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/base",
+        "tree_sha256": "e5f985f3c2b601682e9656fdd736a654c041c8210e388874325e65bcaede3fe3",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": false,
+        "git_tree": "9afdcdc34dfb54fbc487bfa99a383369d5b1e901"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007f887f541000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007f887ee00000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007f887e600000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f887e200000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f887ed17000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f887f4f6000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f887de00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f887f543000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/release": {
+      "version": "patched",
+      "mode": "release",
+      "ok": true,
+      "binary_path": "/tmp/runall2/csvsum_regression/patched/release/target.bin",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "command": "gcc -O2 -g /home/claude/patchval_project/targets/csvsum/regression/csvsum.c -o /tmp/runall2/csvsum_regression/patched/release/target.bin",
+      "cflags": "-O2 -g",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/regression",
+        "tree_sha256": "6ed33cfce17757c78b03ce1964a74a5802e7f38a34d0dc0113112d88ded43418",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "810a474028b77c4c64ead4be70860b6475a218bf"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fde102d9000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fde10000000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fde102db000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    },
+    "patched/sanitized": {
+      "version": "patched",
+      "mode": "sanitized",
+      "ok": true,
+      "binary_path": "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "command": "gcc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 /home/claude/patchval_project/targets/csvsum/regression/csvsum.c -o /tmp/runall2/csvsum_regression/patched/sanitized/target.bin",
+      "cflags": "-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0",
+      "returncode": 0,
+      "source": {
+        "path": "/home/claude/patchval_project/targets/csvsum/regression",
+        "tree_sha256": "6ed33cfce17757c78b03ce1964a74a5802e7f38a34d0dc0113112d88ded43418",
+        "git_commit": "1acee5a274a70a35c44f90794195d5c452dc0987",
+        "git_dirty": true,
+        "git_tree": "810a474028b77c4c64ead4be70860b6475a218bf"
+      },
+      "runtime_libs": [
+        "linux-vdso.so.1 (0x00007fb31bba6000)",
+        "libasan.so.8 => /lib/x86_64-linux-gnu/libasan.so.8 (0x00007fb31b400000)",
+        "libubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007fb31ac00000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb31a800000)",
+        "libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fb31b317000)",
+        "libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fb31bb5b000)",
+        "libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fb31a400000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007fb31bba8000)"
+      ],
+      "sandbox": "bwrap",
+      "stderr_tail": ""
+    }
+  },
+  "diff": {
+    "source": "tree",
+    "files": [
+      {
+        "path": "csvsum.c",
+        "status": "modified",
+        "base_changed_lines": 1,
+        "patched_changed_lines": 2,
+        "changed_functions": [
+          "process_row"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "test_id": "crash_wide",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-corruption",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "caller_function",
+        "side": "base",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "process_row"
+        ],
+        "matched_lines": [],
+        "explanation": "the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 140,
+          "minimized_size": 5,
+          "iterations": 39,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_wide",
+        "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_wide/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "crash_narrow",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-corruption",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "caller_function",
+        "side": "base",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "process_row"
+        ],
+        "matched_lines": [],
+        "explanation": "the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 32,
+          "minimized_size": 5,
+          "iterations": 35,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_narrow",
+        "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_narrow/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "axis": "security",
+      "status": "FIXED",
+      "decisive_mode": "sanitized",
+      "per_mode": {
+        "sanitized": {
+          "verdict": "FIXED",
+          "base_state": "CRASH",
+          "base_detail": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        },
+        "release": {
+          "verdict": "NOT_TRIGGERED",
+          "base_state": "NOCRASH",
+          "base_detail": "exit 0",
+          "patched_state": "CLEAN",
+          "patched_detail": "exit 0 (graceful)",
+          "identity_basis": null
+        }
+      },
+      "error_type": "heap-buffer-overflow",
+      "detection": "sanitizer_asan",
+      "correlation": {
+        "confidence": "strong",
+        "relation": "caller_function",
+        "side": "base",
+        "matched_files": [
+          "csvsum.c"
+        ],
+        "matched_functions": [
+          "process_row"
+        ],
+        "matched_lines": [],
+        "explanation": "the crash manifests in accumulate (csvsum.c:26) which the patch did not change, but the patch modified its caller process_row on the same call path, and the crash outcome differs between base and patched: the fix is in the caller"
+      },
+      "stability": {
+        "replays": [
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok",
+          "ok"
+        ],
+        "expected": "ok",
+        "stable": true,
+        "count": 6,
+        "observations": [
+          {
+            "side": "base",
+            "replay": 1,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 2,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "base",
+            "replay": 3,
+            "observed": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ",
+            "expected": "CRASH:heap-buffer-overflow|csvsum.c|accumulate|READ"
+          },
+          {
+            "side": "patched",
+            "replay": 1,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 2,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          },
+          {
+            "side": "patched",
+            "replay": 3,
+            "observed": "CLEAN",
+            "expected": "CLEAN"
+          }
+        ],
+        "mode": "sanitized",
+        "minimization": {
+          "original_size": 5,
+          "minimized_size": 5,
+          "iterations": 13,
+          "stable": true,
+          "replays": [
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26",
+            "heap-buffer-overflow|csvsum.c|accumulate|READ|L26"
+          ],
+          "budget_exhausted": false
+        }
+      },
+      "reproducer": {
+        "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/reg_crash_wide_6f6babaf",
+        "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/reg_crash_wide_6f6babaf/manifest.json",
+        "replay_input": "input.min.bin"
+      },
+      "base_evidence": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "patched_evidence": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "note": "crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)"
+    },
+    {
+      "test_id": "valid_basic",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'a=5\\nb=7\\nc=0\\n' != expected 'a=5\\nb=7\\nc=9\\n'"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'a=5\\nb=7\\nc=0\\n' != expected 'a=5\\nb=7\\nc=9\\n'"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: stdout 'a=5\\nb=7\\nc=0\\n' != expected 'a=5\\nb=7\\nc=9\\n'"
+    },
+    {
+      "test_id": "valid_two",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'x=7.5\\ny=0\\n' != expected 'x=7.5\\ny=25.5\\n'"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'x=7.5\\ny=0\\n' != expected 'x=7.5\\ny=25.5\\n'"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: stdout 'x=7.5\\ny=0\\n' != expected 'x=7.5\\ny=25.5\\n'"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "axis": "functional",
+      "status": "FUNC_REGRESSION",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'a=8\\nb=10\\nc=0\\n' != expected 'a=8\\nb=10\\nc=12\\n'"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": false,
+          "patched_reason": "stdout 'a=8\\nb=10\\nc=0\\n' != expected 'a=8\\nb=10\\nc=12\\n'"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "valid input passed on base but failed on patched [sanitized]: stdout 'a=8\\nb=10\\nc=0\\n' != expected 'a=8\\nb=10\\nc=12\\n'"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "axis": "functional",
+      "status": "FUNC_OK",
+      "decisive_mode": null,
+      "per_mode": {
+        "sanitized": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        },
+        "release": {
+          "base_pass": true,
+          "base_reason": "ok",
+          "patched_pass": true,
+          "patched_reason": "ok"
+        }
+      },
+      "error_type": null,
+      "detection": null,
+      "correlation": null,
+      "stability": null,
+      "reproducer": null,
+      "base_evidence": null,
+      "patched_evidence": null,
+      "note": "behaviour preserved in every build mode"
+    }
+  ],
+  "executions": [
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0101,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/base-release.stdout",
+      "stderr_file": "logs/valid_basic/base-release.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0178,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=9\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/base-sanitized.stdout",
+      "stderr_file": "logs/valid_basic/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0094,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/patched-release.stdout",
+      "stderr_file": "logs/valid_basic/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_basic",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0174,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_basic.csv",
+      "input_sha256": "a25ef019f1bec849448c61558b4dcc09d0a4936cbb8c3a2ad566695f621703f7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=5\nb=7\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_basic/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_basic/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0096,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=25.5\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/base-release.stdout",
+      "stderr_file": "logs/valid_two/base-release.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=25.5\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/base-sanitized.stdout",
+      "stderr_file": "logs/valid_two/base-sanitized.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/patched-release.stdout",
+      "stderr_file": "logs/valid_two/patched-release.stderr"
+    },
+    {
+      "test_id": "valid_two",
+      "test_kind": "valid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- valid_two.csv",
+      "input_sha256": "f7ad363a409149535b13d1d4814d2417b15517c25c828ab67087b5e34363d011",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "x=7.5\ny=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/valid_two/patched-sanitized.stdout",
+      "stderr_file": "logs/valid_two/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/base-release.stdout",
+      "stderr_file": "logs/boundary_header_only/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_header_only/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/patched-release.stdout",
+      "stderr_file": "logs/boundary_header_only/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_header_only",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_header_only.csv",
+      "input_sha256": "facf7c7ae315fc177ccc74b3d837762f7257b6ded1e1f906b7d034f25590263d",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_header_only/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_header_only/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=12\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/base-release.stdout",
+      "stderr_file": "logs/boundary_blank_line/base-release.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=12\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/base-sanitized.stdout",
+      "stderr_file": "logs/boundary_blank_line/base-sanitized.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/patched-release.stdout",
+      "stderr_file": "logs/boundary_blank_line/patched-release.stderr"
+    },
+    {
+      "test_id": "boundary_blank_line",
+      "test_kind": "boundary",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- boundary_blank_line.csv",
+      "input_sha256": "d65e1d4e0f0ddf628cd913f1eb1d4716b476ea921a043eb3691fac0c76864cd7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=8\nb=10\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/boundary_blank_line/patched-sanitized.stdout",
+      "stderr_file": "logs/boundary_blank_line/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/base-release.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/base-release.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0087,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/base-sanitized.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/base-sanitized.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.009,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/patched-release.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/patched-release.stderr"
+    },
+    {
+      "test_id": "invalid_nonnumeric",
+      "test_kind": "invalid",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0089,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- invalid_nonnumeric.csv",
+      "input_sha256": "555e2e3298ad0bfb579ed92ba6f25c9e687005e849a86a48b850c449ea6412b1",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=0\nb=0\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/invalid_nonnumeric/patched-sanitized.stdout",
+      "stderr_file": "logs/invalid_nonnumeric/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "malloc(): corrupted top size\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-corruption",
+        "detection": "glibc_heap_check",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "glibc: malloc(): corrupted top size",
+        "fingerprint": "heap-corruption",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_wide/base-release.stdout",
+      "stderr_file": "logs/crash_wide/base-release.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1156,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x561df2b709fd bp 0x7ffdfbd9fac0 sp 0x7ffdfbd9fab0\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x561df2b709fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x561df2b709fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x561df2b709fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7f3fb462a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f3fb462a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x561df2b70384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7f3fb52fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x561df2b70971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7f3fb462a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f3fb462a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x561df2b70384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_wide/base-sanitized.stdout",
+      "stderr_file": "logs/crash_wide/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0097,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_wide/patched-release.stdout",
+      "stderr_file": "logs/crash_wide/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_wide",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0094,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_wide.csv",
+      "input_sha256": "440d604a8af921f127bfe11c7ea0cdf7c2df74e3b17c84931c0820c0f26de0d7",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_wide/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_wide/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "malloc(): corrupted top size\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-corruption",
+        "detection": "glibc_heap_check",
+        "access": null,
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "glibc: malloc(): corrupted top size",
+        "fingerprint": "heap-corruption",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_narrow/base-release.stdout",
+      "stderr_file": "logs/crash_narrow/base-release.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1155,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x503000000058 at pc 0x55baf22d39fd bp 0x7ffeb2b15c20 sp 0x7ffeb2b15c10\nREAD of size 8 at 0x503000000058 thread T0\n    #0 0x55baf22d39fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x55baf22d39fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x55baf22d39fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7f318d42a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f318d42a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x55baf22d3384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\n0x503000000058 is located 0 bytes after 24-byte region [0x503000000040,0x503000000058)\nallocated by thread T0 here:\n    #0 0x7f318e0fd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x55baf22d3971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7f318d42a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f318d42a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x55baf22d3384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x502ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x502fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x503000000000: fa fa 00 00 00 fa fa fa 00 00 00[fa]fa fa fa fa\n  0x503000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x503000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/crash_narrow/base-sanitized.stdout",
+      "stderr_file": "logs/crash_narrow/base-sanitized.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0097,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_narrow/patched-release.stdout",
+      "stderr_file": "logs/crash_narrow/patched-release.stderr"
+    },
+    {
+      "test_id": "crash_narrow",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0092,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- crash_narrow.csv",
+      "input_sha256": "007554abb972929e56fae04a3eeb9ed4408585ccc8a55c06afe2437bc425ab34",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "a=2\nb=3\nc=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/crash_narrow/patched-sanitized.stdout",
+      "stderr_file": "logs/crash_narrow/patched-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "release",
+      "build": "base/release",
+      "binary_sha256": "ef88f15c839dbea315566d55af1cf3ddebdd9e166e4021ae1e7deffc4ec93464",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0091,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "3=1\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/base-release.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/base-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "base",
+      "mode": "sanitized",
+      "build": "base/sanitized",
+      "binary_sha256": "d391f7d306b4f69e6c9f65483a07be8bc18329924dc9e473d6890e4c7b98c83f",
+      "exit_code": null,
+      "signal": "SIGABRT",
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.1155,
+      "command": [
+        "/tmp/runall2/csvsum_regression/base/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "",
+      "stderr_tail": "=================================================================\n==2==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000038 at pc 0x556f1dc3d9fd bp 0x7fffde20b400 sp 0x7fffde20b3f0\nREAD of size 8 at 0x502000000038 thread T0\n    #0 0x556f1dc3d9fc in accumulate /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26\n    #1 0x556f1dc3d9fc in process_row /home/claude/patchval_project/targets/csvsum/base/csvsum.c:47\n    #2 0x556f1dc3d9fc in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:84\n    #3 0x7f5bd622a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #4 0x7f5bd622a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #5 0x556f1dc3d384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\n0x502000000038 is located 0 bytes after 8-byte region [0x502000000030,0x502000000038)\nallocated by thread T0 here:\n    #0 0x7f5bd6efd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77\n    #1 0x556f1dc3d971 in main /home/claude/patchval_project/targets/csvsum/base/csvsum.c:78\n    #2 0x7f5bd622a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58\n    #3 0x7f5bd622a28a in __libc_start_main_impl ../csu/libc-start.c:360\n    #4 0x556f1dc3d384 in _start (/tmp/runall2/csvsum_regression/base/sanitized/target.bin+0x2384) (BuildId: 0db01581e72affe493875402b0753943e286bbc2)\n\nSUMMARY: AddressSanitizer: heap-buffer-overflow /home/claude/patchval_project/targets/csvsum/base/csvsum.c:26 in accumulate\nShadow bytes around the buggy address:\n  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n=>0x502000000000: fa fa 02 fa fa fa 00[fa]fa fa fa fa fa fa fa fa\n  0x502000000080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\n  0x502000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa\nShadow byte legend (one shadow byte represents 8 application bytes):\n  Addressable:           00\n  Partially addressable: 01 02 03 04 05 06 07 \n  Heap left redzone:       fa\n  Freed heap region:       fd\n  Stack left redzone:      f1\n  Stack mid redzone:       f2\n  Stack right redzone:     f3\n  Stack after return:      f5\n  Stack use after scope:   f8\n  Global redzone:          f9\n  Global init order:       f6\n  Poisoned by user:        f7\n  Container overflow:      fc\n  Array cookie:            ac\n  Intra object redzone:    bb\n  ASan internal:           fe\n  Left alloca redzone:     ca\n  Right alloca redzone:    cb\n==2==ABORTING\n",
+      "analysis": {
+        "state": "crash",
+        "is_crash": true,
+        "error_type": "heap-buffer-overflow",
+        "detection": "sanitizer_asan",
+        "access": "READ",
+        "termination": {
+          "signal": "SIGABRT",
+          "exit_code": null,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": "AddressSanitizer: heap-buffer-overflow",
+        "fingerprint": "heap-buffer-overflow|accumulate@csvsum.c:26|READ",
+        "top_frames": [
+          {
+            "function": "accumulate",
+            "file": "csvsum.c",
+            "line": 26
+          },
+          {
+            "function": "process_row",
+            "file": "csvsum.c",
+            "line": 47
+          },
+          {
+            "function": "main",
+            "file": "csvsum.c",
+            "line": 84
+          },
+          {
+            "function": "__libc_start_call_main",
+            "file": "../sysdeps/nptl/libc_start_call_main.h",
+            "line": 58
+          },
+          {
+            "function": "__libc_start_main_impl",
+            "file": "../csu/libc-start.c",
+            "line": 360
+          },
+          {
+            "function": "_start",
+            "file": null,
+            "line": null
+          }
+        ]
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/base-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/base-sanitized.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "release",
+      "build": "patched/release",
+      "binary_sha256": "3fbfa12c6165dd52a82a6eaf2f533071cdaec5ca1e8f10f3e4c94c45b8689307",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0102,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/release/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {},
+      "output_truncated": false,
+      "stdout_tail": "3=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/patched-release.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/patched-release.stderr"
+    },
+    {
+      "test_id": "reg_crash_wide_6f6babaf",
+      "test_kind": "security",
+      "version": "patched",
+      "mode": "sanitized",
+      "build": "patched/sanitized",
+      "binary_sha256": "1edea5b30c51856d1ebc60ab66062da7e520c1f196dc0211703ea5035e0ecc57",
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "resource_limited": false,
+      "wall_time": 0.0094,
+      "command": [
+        "/tmp/runall2/csvsum_regression/patched/sanitized/target.bin"
+      ],
+      "input": "stdin <- reg_crash_wide_6f6babaf.bin",
+      "input_sha256": "6f6babaf7b09ae898d03a1a6fc7ddb558f6706b3abef987d2b49ca0523c32bc6",
+      "sandbox": "bwrap",
+      "env": {
+        "ASAN_OPTIONS": "abort_on_error=1:exitcode=99:print_stacktrace=1:detect_leaks=0:handle_segv=1:symbolize=1:halt_on_error=1:hard_rss_limit_mb=512",
+        "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+      },
+      "output_truncated": false,
+      "stdout_tail": "3=0\n",
+      "stderr_tail": "",
+      "analysis": {
+        "state": "clean",
+        "is_crash": false,
+        "error_type": "unknown",
+        "detection": "none",
+        "access": null,
+        "termination": {
+          "signal": null,
+          "exit_code": 0,
+          "timed_out": false,
+          "resource_limited": false
+        },
+        "unclassified_reason": null,
+        "sanitizer_headline": null,
+        "fingerprint": "nocrash",
+        "top_frames": []
+      },
+      "stdout_file": "logs/reg_crash_wide_6f6babaf/patched-sanitized.stdout",
+      "stderr_file": "logs/reg_crash_wide_6f6babaf/patched-sanitized.stderr"
+    }
+  ],
+  "hardening": {
+    "base": {
+      "binary": "/tmp/runall2/csvsum_regression/base/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "patched": {
+      "binary": "/tmp/runall2/csvsum_regression/patched/release/target.bin",
+      "valid": true,
+      "error": null,
+      "nx": true,
+      "pie": true,
+      "relro": "full",
+      "stack_canary": true,
+      "evidence": {
+        "gnu_stack": "GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10",
+        "elf_type": "DYN (Position-Independent Executable file)",
+        "gnu_relro": true,
+        "bind_now": true,
+        "stack_chk_fail_symbol": true
+      },
+      "notes": [
+        "PIE in the file does not prove ASLR is active in the runtime environment.",
+        "Presence of a stack canary symbol does not guarantee every function is protected."
+      ]
+    },
+    "changes": [],
+    "protection_regressed": false
+  },
+  "reproducers": [
+    {
+      "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_wide",
+      "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_wide/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_narrow",
+      "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/crash_narrow/manifest.json",
+      "replay_input": "input.min.bin"
+    },
+    {
+      "bundle_dir": "/tmp/runall2/csvsum_regression/artifacts/reproducers/reg_crash_wide_6f6babaf",
+      "manifest": "/tmp/runall2/csvsum_regression/artifacts/reproducers/reg_crash_wide_6f6babaf/manifest.json",
+      "replay_input": "input.min.bin"
+    }
+  ],
+  "regression": {
+    "loaded_from_suite": [
+      "reg_crash_wide_6f6babaf"
+    ],
+    "added_to_suite": []
+  },
+  "errors": []
+}

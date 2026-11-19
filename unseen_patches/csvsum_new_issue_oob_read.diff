@@ -1,0 +1,35 @@
+# csvsum: blocks the write overflow but introduces a new heap OOB read -> expected 10 (NEW_ISSUE)
+--- a/csvsum.c
++++ b/csvsum.c
+@@ -39,12 +39,13 @@
+ 
+ static void process_row(double *sums, int ncols, char *line)
+ {
+-    (void)ncols;
+     int i = 0;
+     char *save = NULL;
+     for (char *tok = strtok_r(line, ",", &save); tok != NULL;
+          tok = strtok_r(NULL, ",", &save)) {
+-        accumulate(sums, i, atof(tok));
++        if (i < ncols) {
++            accumulate(sums, i, atof(tok));
++        }
+         i++;
+     }
+ }
+@@ -85,10 +86,15 @@
+         }
+     }
+ 
++    double total = 0;
++    for (int i = 0; i <= ncols; ++i) {      /* off-by-one: reads sums[ncols] */
++        total += sums[i];
++    }
+     for (int i = 0; i < ncols; ++i) {
+         printf("%s=%g\n", names[i], sums[i]);
+         free(names[i]);
+     }
++    fprintf(stderr, "total=%g\n", total);
+     free(sums);
+     return 0;
+ }

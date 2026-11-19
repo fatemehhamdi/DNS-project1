@@ -1,0 +1,55 @@
+============================================================================
+  patchval 2.0.0 :: vulnstr-incomplete
+============================================================================
+VERDICT: exit 10 (VULN_OR_SECURITY)
+Isolation: bwrap [full] network=disabled
+Checks: minimization enabled, 3 replays per finding
+
+Builds:
+  base/release       ok     bin=c1b7a9c550ef  src=99169265e77f  commit=1acee5a274+dirty
+  base/sanitized     ok     bin=517ffbaadb89  src=99169265e77f  commit=1acee5a274+dirty
+  patched/release    ok     bin=1a400b369a60  src=bdb9d0b57289  commit=1acee5a274+dirty
+  patched/sanitized  ok     bin=1eb725766f2f  src=bdb9d0b57289  commit=1acee5a274+dirty
+
+Security findings:
+  [FIXED] crash_name  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base CRASH        patched CLEAN        -> FIXED
+      replays : 6x stable
+      minimized: 206 -> 34 bytes (stable)
+      patch link: strong (caller_function, base) [process_line]
+        the crash manifests in store_value (vulnstr.c:25) which the patch did not change, but the patch modified its caller process_line on the same call path, and the crash outcome differs between base and patched: the fix is in the caller
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/vulnstr_incomplete/artifacts/reproducers/crash_name
+  [INCOMPLETE_FIX] crash_data  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CRASH        -> VULN_REMAINS
+      release  : base CRASH        patched CRASH        -> VULN_REMAINS
+      replays : 6x stable
+      minimized: 206 -> 34 bytes (stable)
+      patch link: weak (caller_function, patched) [process_line]
+        the patch modified process_line, a caller on the crashing path, but the crash in store_value still occurs: the change does not cover this input
+      note: one input exposing this vulnerability is blocked, but the same vulnerability (same type/file/function) is still reachable via this input
+      bundle: /tmp/runall2/vulnstr_incomplete/artifacts/reproducers/crash_data
+  [INCOMPLETE_FIX] reg_crash_name_97de6943  type=buffer-overflow  via=sanitizer_ubsan
+      sanitized: base CRASH        patched CRASH        -> VULN_REMAINS
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 34 -> 34 bytes (stable)
+      patch link: weak (caller_function, patched) [process_line]
+        the patch modified process_line, a caller on the crashing path, but the crash in store_value still occurs: the change does not cover this input
+      note: one input exposing this vulnerability is blocked, but the same vulnerability (same type/file/function) is still reachable via this input
+      bundle: /tmp/runall2/vulnstr_incomplete/artifacts/reproducers/reg_crash_name_97de6943
+
+Functional findings (independent oracle):
+  [FUNC_OK] valid_name
+  [FUNC_OK] valid_city
+  [FUNC_OK] boundary_empty
+  [FUNC_OK] invalid_noeq
+
+Binary hardening (patched release build):
+  NX=True PIE=True RELRO=full StackCanary=True
+
+Regression suite: 1 test(s) loaded from earlier runs, 0 recorded by this run.
+
+Scope: results hold for the documented test suite only.
+Exit codes: 0=PASS 10=VULN/NEW_ISSUE 20=FUNC_REGRESSION 30=BUILD/CONFIG 40=INCONCLUSIVE

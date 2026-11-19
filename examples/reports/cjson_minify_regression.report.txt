@@ -1,0 +1,55 @@
+============================================================================
+  patchval 2.0.0 :: cjson_minify-regression
+============================================================================
+VERDICT: exit 20 (FUNC_REGRESSION)
+Isolation: bwrap [full] network=disabled
+Checks: minimization enabled, 3 replays per finding
+
+Builds:
+  base/release       ok     bin=be86303e5f69  src=4be813902ce7  commit=1acee5a274
+  base/sanitized     ok     bin=cc4659090652  src=4be813902ce7  commit=1acee5a274
+  patched/release    ok     bin=30fb51b7b7ea  src=79454bb3f2cf  commit=1acee5a274+dirty
+  patched/sanitized  ok     bin=578f1ead9a33  src=79454bb3f2cf  commit=1acee5a274+dirty
+
+Security findings:
+  [FIXED] crash_comment  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 2 -> 2 bytes (stable)
+      patch link: strong (crash_site_function, base) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_comment
+  [FIXED] crash_string  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 4 -> 1 bytes (stable)
+      patch link: strong (crash_site_function, base) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/cjson_minify_regression/artifacts/reproducers/crash_string
+  [FIXED] reg_crash_string_8a331fdd  type=heap-buffer-overflow  via=sanitizer_asan
+      sanitized: base CRASH        patched CLEAN        -> FIXED
+      release  : base NOCRASH      patched CLEAN        -> NOT_TRIGGERED
+      replays : 6x stable
+      minimized: 1 -> 1 bytes (stable)
+      patch link: strong (crash_site_function, base) [cJSON_Minify]
+        the faulting function cJSON_Minify (cJSON.c) was modified by the patch
+      note: crash reproduced on base is not observed on patched; patched exited gracefully (scope: this input, this suite)
+      bundle: /tmp/runall2/cjson_minify_regression/artifacts/reproducers/reg_crash_string_8a331fdd
+
+Functional findings (independent oracle):
+  [FUNC_OK] valid_simple
+  [FUNC_REGRESSION] valid_string_space  -- valid input passed on base but failed on patched [sanitized]: stdout '{"fullname":"JohnDoe"}' != expected '{"full name":"John Doe"}'
+  [FUNC_OK] valid_nested
+  [FUNC_OK] boundary_empty
+
+Binary hardening (patched release build):
+  NX=True PIE=True RELRO=full StackCanary=True
+
+Regression suite: 1 test(s) loaded from earlier runs, 0 recorded by this run.
+
+Scope: results hold for the documented test suite only.
+Exit codes: 0=PASS 10=VULN/NEW_ISSUE 20=FUNC_REGRESSION 30=BUILD/CONFIG 40=INCONCLUSIVE
