@@ -1,20 +1,26 @@
-"""Unit tests for crash evidence, patch diffs, and verdicts."""
+"""Fast unit tests (no target compilation).
+
+Section "reviewer defects" reproduces, one test each, the defects reported in
+the external evaluation of v1.0 -- they all failed on v1.0 and must pass now.
+"""
 
 import os
 import sys
 
 import pytest
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
 
-from patchval import classify, correlate, crash, diffparse, exitcodes
-from patchval.config import ConfigError, TestCase, load
-from patchval.crash import CrashInfo, Frame
-from patchval.model import (Execution, Finding, TestRecord, FIXED, FUNC_OK,
-                            FUNC_REGRESSION, INCOMPLETE_FIX, INCONCLUSIVE,
-                            NEW_ISSUE, VULN_REMAINS)
+from patchval import exitcodes, diffparse, crash, classify, correlate, hardening, sandbox, runner
+from patchval.config import load, ConfigError, TestCase
 from patchval.runner import RunResult
+from patchval.crash import CrashInfo, Frame
+from patchval.model import (TestRecord, Execution, Finding, FIXED, VULN_REMAINS, INCOMPLETE_FIX,
+                            NEW_ISSUE, INCONCLUSIVE, FUNC_REGRESSION, FUNC_OK)
 
+
+# ------------------------------------------------------------------ helpers
 
 def rr(**kw):
     d = dict(test_id="t", returncode=0, exit_code=0, signal_num=None, signal_name=None,
@@ -53,6 +59,8 @@ def stable(f):
     classify.apply_stability(f, ["ok", "ok", "ok"], "ok")
     return f
 
+
+# ======================================================= reviewer defects
 
 def test_defect1_timeout_on_patched_is_never_fixed_or_pass():
     to = rr(timed_out=True, exit_code=None)
@@ -115,6 +123,17 @@ def test_defect3b_fixed_without_replays_cannot_pass():
     assert classify.aggregate_exit_code([f], True) == exitcodes.INCONCLUSIVE
 
 
+def test_defect3c_config_rejects_fewer_than_three_replays(tmp_path):
+    (tmp_path / "b").mkdir(); (tmp_path / "p").mkdir()
+    (tmp_path / "i").write_text("x")
+    cfg = tmp_path / "c.yaml"
+    cfg.write_text("name: x\nversions: {base: {path: b}, patched: {path: p}}\n"
+                   "build: {command: 'true', binary: x}\nrun: {replays: 2}\n"
+                   "tests: {security: [{id: s, input_file: i, known_crasher: true}]}\n")
+    with pytest.raises(ConfigError):
+        load(str(cfg))
+
+
 def test_defect4_sigterm_is_not_a_security_crash():
     ci = crash.analyze(rr(signal_name="SIGTERM", signal_num=15, exit_code=None), False)
     assert not ci.is_crash and ci.state == crash.STATE_UNCLASSIFIED
@@ -132,6 +151,35 @@ def test_defect4c_segv_and_glibc_heap_check_are_crashes():
                           stderr="malloc(): corrupted top size\n"), False)
     assert ci.is_crash and ci.detection == crash.DET_HEAP_CHECK
 
+
+def test_defect5_hardening_on_missing_or_non_elf_file_is_unknown(tmp_path):
+    h = hardening.inspect(str(tmp_path / "nope"))
+    assert not h.valid and h.nx is None and h.relro == "unknown"
+    txt = tmp_path / "f.txt"; txt.write_text("hello")
+    assert not hardening.inspect(str(txt)).valid
+    d = hardening.compare(h, hardening.inspect(sys.executable))
+    assert d.regressed is None
+
+
+def test_defect6_timeout_kills_whole_process_group(tmp_path):
+    import shutil, subprocess, time
+    if not shutil.which("gcc"):
+        pytest.skip("gcc missing")
+    src = tmp_path / "h.c"
+    src.write_text("#include <unistd.h>\nint main(void){if(fork()==0){for(;;)sleep(1);}for(;;)sleep(1);}\n")
+    binp = tmp_path / "hangbin"
+    subprocess.run(["gcc", str(src), "-o", str(binp)], check=True)
+    cfg = load(os.path.join(ROOT, "targets", "csvsum", "config.correct.yaml"))
+    import dataclasses
+    cfg = dataclasses.replace(cfg, timeout_sec=1)
+    r = runner.run(str(binp), cfg, TestCase(id="h", input_file=None, kind="security"), False,
+                   sandbox=sandbox.Sandbox("none", sandbox.LEVEL_NONE))
+    time.sleep(0.3)
+    left = subprocess.run(["pgrep", "-f", str(binp)], capture_output=True, text=True).stdout.split()
+    assert r.timed_out and left == []
+
+
+# ======================================================= core behaviour
 
 def test_exitcode_priority():
     assert exitcodes.resolve([0]) == 0
@@ -223,6 +271,12 @@ def test_parse_patch_file_with_strip_and_both_sides():
     assert fd.old_changed == {4} and fd.new_changed == {4, 5}
 
 
+def test_function_spans_on_real_cjson():
+    src = open(os.path.join(ROOT, "targets", "cjson_minify", "base", "cJSON.c")).read()
+    names = {n for n, _, _ in diffparse.function_spans(src)}
+    assert {"cJSON_Minify", "cJSON_Parse", "cJSON_Delete"} <= names
+
+
 def test_correlation_caller_fix_strong_only_with_differential():
     d = diffparse.Diff(files=[diffparse.FileDiff("c.c", new_changed={50}, old_changed={50},
                                                  old_functions={"process_row"},
@@ -232,6 +286,47 @@ def test_correlation_caller_fix_strong_only_with_differential():
     assert correlate.correlate(ci, d, "base", differential=True).confidence == "strong"
     assert correlate.correlate(ci, d, "patched", differential=False).confidence == "weak"
 
+
+def test_input_modes_build_correct_argv(tmp_path):
+    inp = tmp_path / "in.txt"; inp.write_text("a=1\nb=2\n")
+    cfg = load(os.path.join(ROOT, "targets", "vulnstr", "config.correct.yaml"))
+    import dataclasses
+    t = TestCase(id="t", input_file=str(inp), kind="valid")
+    argv, _, stdin = runner.build_argv("/bin/x", dataclasses.replace(cfg, input_mode="stdin"), t, str(inp))
+    assert argv == ["/bin/x"] and stdin == b"a=1\nb=2\n"
+    argv, _, stdin = runner.build_argv("/bin/x", dataclasses.replace(
+        cfg, input_mode="file", argv_template=["-f", "{input}"]), t, str(inp))
+    assert argv == ["/bin/x", "-f", str(inp)] and stdin == b""
+    argv, _, _ = runner.build_argv("/bin/x", dataclasses.replace(
+        cfg, input_mode="argv", argv_split="lines"), t, str(inp))
+    assert argv == ["/bin/x", "a=1", "b=2"]
+    argv, _, _ = runner.build_argv("/bin/x", dataclasses.replace(cfg, input_mode="argv"), t, str(inp))
+    assert argv == ["/bin/x", "a=1\nb=2"]
+
+
+def test_sandbox_blocks_writes_outside_scratch(tmp_path):
+    sb = sandbox.select("bwrap")
+    if sb.backend != "bwrap":
+        pytest.skip("bwrap not usable here")
+    target = tmp_path / "should_not_exist"
+    scratch = tmp_path / "scratch"; scratch.mkdir()
+    import subprocess
+    cmd = sb.wrap(["/bin/sh", "-c", f"touch {target}; touch {scratch}/ok"],
+                  ro_paths=[], rw_paths=[str(scratch)], cwd=str(scratch))
+    subprocess.run(cmd, capture_output=True)
+    assert not target.exists() and (scratch / "ok").exists()
+
+
+def test_config_validation(tmp_path):
+    with pytest.raises(ConfigError):
+        load("/nonexistent/x.yaml")
+    cfg = tmp_path / "c.yaml"
+    cfg.write_text("name: x\nbuild:\n  command: gcc\n  binary: a\n")
+    with pytest.raises(ConfigError):
+        load(str(cfg))
+
+
+# ---------------------------------------------- v1.2 review-driven fixes
 
 def test_regression_test_with_different_base_identity_is_not_fixed():
     """A regression test must only be adjudicated if base still fails with the RECORDED error."""
@@ -266,6 +361,8 @@ def test_identity_matches_ignores_line_numbers():
                                          ("heap-buffer-overflow", "a.c", "g", "READ"))[0]
 
 
+# ---------------------------------------------- v1.3 review-driven fixes
+
 def test_exit_code_priority_matches_brief_30_10_20_40_0():
     """Brief sec. 3.5: priority 30, 10, 20, 40, 0 (NOT 40 first)."""
     assert exitcodes.resolve([40, 20]) == 20
@@ -275,56 +372,44 @@ def test_exit_code_priority_matches_brief_30_10_20_40_0():
     assert exitcodes.resolve([40, 0]) == 40
 
 
-def _rr(stderr="", signal_name=None, signal_num=None, exit_code=0, timed_out=False, oom=False):
-    return RunResult(
-        test_id="t", returncode=exit_code, exit_code=exit_code,
-        signal_num=signal_num, signal_name=signal_name, stdout="",
-        stderr=stderr, wall_time=0.01, timed_out=timed_out, oom_or_rlimit=oom,
-        command=["x"], input_desc="stdin",
-    )
+def test_registry_is_relocated_to_writable_volume_and_seeded(tmp_path):
+    from patchval import regression
+    src = tmp_path / "ro" / "targets" / "csvsum" / "regression"
+    (src / "inputs").mkdir(parents=True)
+    (src / "suite.json").write_text('{"version": 2, "tests": []}')
+    (src / "inputs" / "a.bin").write_bytes(b"x")
+    reg = tmp_path / "vol"
+    dst = regression.relocate_suite(str(src / "suite.json"), str(reg))
+    assert dst == str(reg / "csvsum" / "suite.json")
+    assert os.path.isfile(dst) and os.path.isfile(reg / "csvsum" / "inputs" / "a.bin")
+    open(dst, "w").write('{"version": 2, "tests": [{"id": "kept"}]}')
+    assert regression.relocate_suite(str(src / "suite.json"), str(reg)) == dst
+    assert "kept" in open(dst).read()                      # volume copy is authoritative
 
 
-def test_crash_canary_vs_fortify():
-    ci1 = crash.analyze(_rr(stderr="*** stack smashing detected ***: terminated",
-                            signal_name="SIGABRT", signal_num=6), False)
-    assert ci1.detection == crash.DET_CANARY
-    ci2 = crash.analyze(_rr(stderr="*** buffer overflow detected ***: terminated",
-                            signal_name="SIGABRT", signal_num=6), False)
-    assert ci2.detection == crash.DET_FORTIFY
+def test_minimization_predicate_requires_other_side_condition(monkeypatch):
+    from patchval import minimize
+    monkeypatch.setattr(minimize.runner, "run", lambda *a, **k: rr())
+    monkeypatch.setattr(minimize.crash, "analyze", lambda *a, **k: asan_crash())
+    sig = minimize.signature(asan_crash())
+    always = minimize.make_predicate("b", None, None, sig, True, None, "/", extra=lambda p: True)
+    never = minimize.make_predicate("b", None, None, sig, True, None, "/", extra=lambda p: False)
+    assert always(b"abc") and not never(b"abc")
 
 
-def test_timeout_is_not_a_crash():
-    ci = crash.analyze(_rr(timed_out=True), True)
-    assert not ci.is_crash
-    assert ci.timed_out
-
-
-def test_bare_sigsegv_is_crash_but_resource_limit_is_not():
-    ci = crash.analyze(_rr(signal_name="SIGSEGV", signal_num=11), False)
-    assert ci.is_crash and ci.error_type == crash.ET_SEGV
-    ci2 = crash.analyze(_rr(signal_name="SIGKILL", signal_num=9, oom=True), False)
-    assert not ci2.is_crash and ci2.resource_limited
-
-
-def test_functional_ok():
-    t = TestCase(id="v", input_file=None, kind="valid", expect_exit=0,
-                 stdout_contains=["OK"])
-    rec = TestRecord(test=t)
-    rec.executions[("base", "release")] = ex("base", "release", clean(), rr(stdout="OK\n"))
-    rec.executions[("patched", "release")] = ex("patched", "release", clean(), rr(stdout="OK\n"))
-    f = classify.classify_functional_test(rec)
-    assert f[0].status == FUNC_OK
-
-
-def test_inconclusive_when_baseline_not_reproduced():
-    t = TestCase(id="c", input_file=None, kind="security", is_known_crasher=True)
-    rec = TestRecord(test=t)
-    rec.executions[("base", "sanitized")] = ex("base", "sanitized", clean())
-    rec.executions[("patched", "sanitized")] = ex("patched", "sanitized", clean())
-    f = classify.classify_security_test(rec)
-    assert f.status == INCONCLUSIVE
-
-
-def test_config_missing_file():
-    with pytest.raises(ConfigError):
-        load("/nonexistent/x.yaml")
+def test_register_failure_is_reported_as_oserror(tmp_path):
+    from patchval import regression
+    import dataclasses
+    cfg = load(os.path.join(ROOT, "targets", "csvsum", "config.correct.yaml"))
+    ro = tmp_path / "ro"; ro.mkdir()
+    cfg = dataclasses.replace(cfg, regression_suite=str(ro / "sub" / "suite.json"))
+    inp = tmp_path / "i.bin"; inp.write_bytes(b"1")
+    ro.chmod(0o555)
+    try:
+        if os.access(ro, os.W_OK):
+            pytest.skip("running as a user that ignores directory permissions")
+        with pytest.raises(OSError):
+            regression.register(cfg, cfg.security_tests[0], str(inp), ("t", "f", "g", "READ"),
+                                {}, "tree", False, "sanitized")
+    finally:
+        ro.chmod(0o755)
