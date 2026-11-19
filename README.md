@@ -1,6 +1,6 @@
 # راهنمای کامل اجرای تست‌های PatchVal
 
-> **مخصوص نسخه `project_fixed_v2.zip`** — لینوکس x86_64  
+
 > این راهنما بر اساس فایل‌های واقعی `Makefile`، `run_all.sh`، `run_unseen.sh`، `scripts/run_in_docker.sh`، `Dockerfile`، `patchval/cli.py` و تست‌های همین نسخه تهیه شده است.
 
 ## ۱. چه تست‌هایی داریم؟
@@ -23,14 +23,8 @@
 
 ## ۲. ورود به پوشه اصلی پروژه
 
-اگر فایل هنوز استخراج نشده است:
 
-```bash
-unzip project_fixed_v2.zip
-cd patchval_project
-```
 
-اگر قبلاً استخراج شده، فقط به همان پوشه بروید. در ریشه صحیح باید این مسیرها دیده شوند:
 
 ```bash
 pwd
@@ -38,7 +32,7 @@ ls -la
 ls patchval/cli.py Makefile run_all.sh run_unseen.sh Dockerfile
 ```
 
-همه فرمان‌های بعدی را، مگر آنکه خلافش ذکر شده باشد، **از ریشه `patchval_project/`** اجرا کنید.
+همه فرمان‌های بعدی را، مگر آنکه خلافش ذکر شده باشد، **از ریشه** اجرا کنید.
 
 ---
 
